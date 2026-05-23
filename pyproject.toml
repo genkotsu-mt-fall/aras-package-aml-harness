@@ -1,0 +1,9 @@
+[project]
+name = "aras-package-aml-harness"
+version = "0.1.0"
+description = "Minimal AML XML harness for Aras Innovator package files"
+requires-python = ">=3.14"
+dependencies = []
+
+[project.scripts]
+aml-harness = "aml_harness.cli:main"
