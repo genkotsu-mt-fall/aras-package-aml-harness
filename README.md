@@ -59,6 +59,15 @@ python -m aml_harness .\samples\good\base.xml
 .\scripts\check.ps1
 ```
 
+Manual Agent Loop の 1 ステップ実行:
+
+```powershell
+python -m harness.agent_loop
+```
+
+このコマンドは、許可済みの検証コマンドだけを実行し、結果を `runs\iteration-N\record.json` に保存します。
+検証に失敗した場合は、次に Codex または Copilot Agent へ渡す `prompt.md` も保存します。
+
 ## Windows 実行ファイルのビルド
 
 Windows 上で実行:
