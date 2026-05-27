@@ -1,0 +1,21 @@
+<AML>
+  <Item type="ItemType" id="4F1AC04A2B484F3ABA4E20DB63808A88" action="add">
+    <name>Part</name>
+    <Relationships>
+      <Item type="Property" id="88888888888888888888888888888888" action="add">
+        <data_type>decimal</data_type>
+        <source_id keyed_name="Part" type="ItemType" name="Part">4F1AC04A2B484F3ABA4E20DB63808A88</source_id>
+        <name>cost</name>
+      </Item>
+    </Relationships>
+  </Item>
+  <Item type="ItemType" id="4F1AC04A2B484F3ABA4E20DB63808A88" action="edit">
+    <Relationships>
+      <Item type="Property" action="edit" where="source_id='4F1AC04A2B484F3ABA4E20DB63808A88' and name='state'">
+        <data_type>string</data_type>
+        <source_id keyed_name="Part" type="ItemType" name="Part">4F1AC04A2B484F3ABA4E20DB63808A88</source_id>
+        <name>state</name>
+      </Item>
+    </Relationships>
+  </Item>
+</AML>

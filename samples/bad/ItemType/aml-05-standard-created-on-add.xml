@@ -1,0 +1,11 @@
+<AML>
+  <Item type="ItemType" id="4F1AC04A2B484F3ABA4E20DB63808A88" action="edit">
+    <Relationships>
+      <Item type="Property" id="22222222222222222222222222222222" action="add">
+        <data_type>date</data_type>
+        <source_id keyed_name="Part" type="ItemType" name="Part">4F1AC04A2B484F3ABA4E20DB63808A88</source_id>
+        <name>created_on</name>
+      </Item>
+    </Relationships>
+  </Item>
+</AML>

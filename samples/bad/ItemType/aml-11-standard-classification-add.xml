@@ -1,0 +1,12 @@
+<AML>
+  <Item type="ItemType" id="4F1AC04A2B484F3ABA4E20DB63808A88" action="add">
+    <name>Part</name>
+    <Relationships>
+      <Item type="Property" id="77777777777777777777777777777777" action="add">
+        <data_type>string</data_type>
+        <source_id keyed_name="Part" type="ItemType" name="Part">4F1AC04A2B484F3ABA4E20DB63808A88</source_id>
+        <name>classification</name>
+      </Item>
+    </Relationships>
+  </Item>
+</AML>

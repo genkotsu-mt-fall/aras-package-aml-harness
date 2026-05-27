@@ -1,0 +1,6 @@
+<AML>
+  <Item
+    type="Form"
+    action="delete"
+    where="name='Design to Goal'" />
+</AML>

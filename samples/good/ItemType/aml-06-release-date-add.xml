@@ -1,0 +1,12 @@
+<AML>
+  <Item type="ItemType" id="4F1AC04A2B484F3ABA4E20DB63808A88" action="add">
+    <name>Simple ECO</name>
+    <Relationships>
+      <Item type="Property" id="33333333333333333333333333333333" action="add">
+        <data_type>date</data_type>
+        <source_id keyed_name="Simple ECO" type="ItemType" name="Simple ECO">4F1AC04A2B484F3ABA4E20DB63808A88</source_id>
+        <name>release_date</name>
+      </Item>
+    </Relationships>
+  </Item>
+</AML>

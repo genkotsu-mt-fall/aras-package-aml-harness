@@ -1,0 +1,10 @@
+<AML>
+  <Item type="Form" id="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" action="add">
+    <name>Part Form</name>
+    <Relationships>
+      <Item type="Field" action="add">
+        <propertytype_id keyed_name="state" type="Property">AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</propertytype_id>
+      </Item>
+    </Relationships>
+  </Item>
+</AML>
