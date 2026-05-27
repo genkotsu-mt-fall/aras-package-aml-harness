@@ -1,0 +1,22 @@
+<AML>
+  <Item
+    type="RelationshipType"
+    id="D7F2AAA8A14041888BAF4C8EE702C08E"
+    action="add">
+    <relationship_id keyed_name="Vendor Part" type="ItemType" name="Vendor Part">
+      <Item type="ItemType" id="144AA8E560464BFF80E55601188D009F" action="add">
+        <name>Vendor Part</name>
+      </Item>
+    </relationship_id>
+    <source_id keyed_name="Vendor" type="ItemType" name="Vendor">9F23A02D1E464F44A3A93A1EFB732B5C</source_id>
+    <name>Vendor Part</name>
+  </Item>
+  <Item
+    type="View"
+    action="delete"
+    where="source_id='144AA8E560464BFF80E55601188D009F'" />
+  <Item
+    type="Form"
+    action="delete"
+    where="name='Vendor Part'" />
+</AML>

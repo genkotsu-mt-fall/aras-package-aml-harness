@@ -1,0 +1,6 @@
+<AML>
+  <Item
+    type="View"
+    action="delete"
+    where="x" />
+</AML>

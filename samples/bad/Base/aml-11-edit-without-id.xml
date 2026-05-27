@@ -1,0 +1,7 @@
+<AML>
+  <Item
+    type="ItemType"
+    action="edit">
+    <name>Vendor Part</name>
+  </Item>
+</AML>

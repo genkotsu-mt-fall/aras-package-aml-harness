@@ -1,6 +1,7 @@
 <AML>
   <Item
     type="View"
+    id="0123456789ABCDEF0123456789ABCDEF"
     action="delete"
     where="source_id='144AA8E560464BFF80E55601188D009F'" />
 </AML>

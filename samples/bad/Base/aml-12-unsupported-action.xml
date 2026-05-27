@@ -1,0 +1,8 @@
+<AML>
+  <Item
+    type="ItemType"
+    id="0123456789ABCDEF0123456789ABCDEF"
+    action="merge">
+    <name>Vendor Part</name>
+  </Item>
+</AML>

@@ -42,54 +42,64 @@ class BaseDeleteCheckTests(unittest.TestCase):
     def test_no_002_top_level_form_delete_with_name_where_passes(self):
         self.assert_sample_passes("samples/good/Base/aml-02-form-delete-where-name.xml")
 
-    def test_no_003_itemtype_add_with_view_and_form_delete_passes(self):
+    def test_no_003_top_level_delete_without_id_passes(self):
         self.assert_sample_passes(
-            "samples/good/Base/aml-03-itemtype-add-with-view-form-delete.xml"
+            "samples/good/Base/aml-03-delete-without-id-with-where.xml"
         )
 
-    def test_no_004_delete_without_id_or_where_reports_only_aml006(self):
+    def test_no_004_multiple_top_level_items_with_delete_cleanup_pass(self):
+        self.assert_sample_passes(
+            "samples/good/Base/aml-04-relationshiptype-add-with-view-form-delete.xml"
+        )
+
+    def test_no_005_top_level_delete_without_where_reports_aml007(self):
         self.assert_sample_reports_rules(
-            "samples/bad/Base/aml-04-delete-without-id-or-where.xml",
+            "samples/bad/Base/aml-05-delete-without-where.xml",
+            ["AML007"],
+        )
+
+    def test_no_006_top_level_delete_with_empty_where_reports_aml007(self):
+        self.assert_sample_reports_rules(
+            "samples/bad/Base/aml-06-delete-empty-where.xml",
+            ["AML007"],
+        )
+
+    def test_no_007_top_level_delete_with_blank_where_reports_aml007(self):
+        self.assert_sample_reports_rules(
+            "samples/bad/Base/aml-07-delete-blank-where.xml",
+            ["AML007"],
+        )
+
+    def test_no_008_top_level_delete_with_minimal_non_empty_where_passes(self):
+        self.assert_sample_passes("samples/good/Base/aml-08-delete-minimal-where.xml")
+
+    def test_no_009_top_level_delete_with_id_and_where_passes(self):
+        self.assert_sample_passes("samples/good/Base/aml-09-delete-with-id-and-where.xml")
+
+    def test_no_010_top_level_add_without_id_still_reports_aml006(self):
+        self.assert_sample_reports_rules(
+            "samples/bad/Base/aml-10-add-without-id.xml",
             ["AML006"],
         )
 
-    def test_no_005_delete_with_empty_where_reports_only_aml006(self):
+    def test_no_011_top_level_edit_without_id_still_reports_aml006(self):
         self.assert_sample_reports_rules(
-            "samples/bad/Base/aml-05-delete-empty-where.xml",
+            "samples/bad/Base/aml-11-edit-without-id.xml",
             ["AML006"],
         )
 
-    def test_no_006_delete_with_blank_where_reports_only_aml006(self):
+    def test_no_012_unsupported_action_still_reports_aml005(self):
         self.assert_sample_reports_rules(
-            "samples/bad/Base/aml-06-delete-blank-where.xml",
-            ["AML006"],
-        )
-
-    def test_no_007_unsupported_action_still_reports_aml005(self):
-        self.assert_sample_reports_rules(
-            "samples/bad/Base/aml-07-unsupported-action.xml",
+            "samples/bad/Base/aml-12-unsupported-action.xml",
             ["AML005"],
         )
 
-    def test_no_008_add_without_id_still_reports_aml006(self):
-        self.assert_sample_reports_rules(
-            "samples/bad/Base/aml-08-add-without-id.xml",
-            ["AML006"],
+    def test_no_013_nested_property_edit_with_where_is_out_of_scope_and_passes(self):
+        self.assert_sample_passes(
+            "samples/good/Base/aml-13-nested-property-edit-where.xml"
         )
 
-    def test_no_009_edit_without_id_still_reports_aml006(self):
-        self.assert_sample_reports_rules(
-            "samples/bad/Base/aml-09-edit-without-id.xml",
-            ["AML006"],
-        )
-
-    def test_no_010_add_with_id_still_passes(self):
-        self.assert_sample_passes("samples/good/Base/aml-10-add-with-id.xml")
-
-    def test_no_011_edit_with_id_still_passes(self):
-        self.assert_sample_passes("samples/good/Base/aml-11-edit-with-id.xml")
-
-    def test_no_012_public_check_failed_itemtype_files_pass(self):
+    def test_public_check_failed_itemtype_files_pass(self):
         public_files = [
             "public/PLM/Import/ItemType/Design To Goal.xml",
             "public/PLM/Import/ItemType/Engineering Efficiency.xml",
@@ -104,7 +114,7 @@ class BaseDeleteCheckTests(unittest.TestCase):
             with self.subTest(relative_path=relative_path):
                 self.assert_sample_passes(relative_path)
 
-    def test_no_013_all_public_itemtype_files_do_not_report_aml005_or_aml006(self):
+    def test_all_public_itemtype_files_do_not_report_aml005_or_aml006(self):
         itemtype_dir = ROOT_DIR / "public" / "PLM" / "Import" / "ItemType"
         public_files = sorted(itemtype_dir.glob("*.xml"))
         self.assertEqual(30, len(public_files), f"Unexpected public file count: {public_files}")

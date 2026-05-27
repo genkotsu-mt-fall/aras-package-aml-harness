@@ -148,23 +148,26 @@ def check_item(path: Path, item: ET.Element) -> list[Diagnostic]:
             )
         )
 
-    if not _has_item_target(action, item_id, where):
+    if action in {"add", "edit"} and not item_id:
         diagnostics.append(
             Diagnostic(
                 file_path=str(path),
                 rule_id="AML006",
-                message="<Item> must have id attribute or non-empty where attribute for delete",
+                message="<Item> action add or edit must have id attribute",
+            )
+        )
+
+    if action == "delete" and not _has_non_empty_value(where):
+        diagnostics.append(
+            Diagnostic(
+                file_path=str(path),
+                rule_id="AML007",
+                message="<Item> action delete must have non-empty where attribute",
             )
         )
 
     return diagnostics
 
 
-def _has_item_target(action: str | None, item_id: str | None, where: str | None) -> bool:
-    if item_id:
-        return True
-
-    if action == "delete" and where is not None and where.strip():
-        return True
-
-    return False
+def _has_non_empty_value(value: str | None) -> bool:
+    return value is not None and bool(value.strip())

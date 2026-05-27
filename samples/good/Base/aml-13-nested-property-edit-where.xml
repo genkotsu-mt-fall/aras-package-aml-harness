@@ -1,0 +1,16 @@
+<AML>
+  <Item
+    type="ItemType"
+    id="653C8EE5DDDF4932B75E5CDF04F0CD42"
+    action="edit">
+    <Relationships>
+      <Item
+        type="Property"
+        action="edit"
+        where="source_id='653C8EE5DDDF4932B75E5CDF04F0CD42' and name='related_id'">
+        <name>related_id</name>
+      </Item>
+    </Relationships>
+    <name>Document File</name>
+  </Item>
+</AML>
