@@ -1,0 +1,12 @@
+<AML>
+  <Item type="ItemType" id="4F1AC04A2B484F3ABA4E20DB63808A88" action="add">
+    <name>Part</name>
+    <Relationships>
+      <Item type="Property" id="074E4827E5044F8BA6B6FD546E21D271" action="add">
+        <data_type>decimal</data_type>
+        <source_id keyed_name="Part" type="ItemType" name="Part">4F1AC04A2B484F3ABA4E20DB63808A88</source_id>
+        <name>cost</name>
+      </Item>
+    </Relationships>
+  </Item>
+</AML>

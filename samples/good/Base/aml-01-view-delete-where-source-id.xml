@@ -1,0 +1,6 @@
+<AML>
+  <Item
+    type="View"
+    action="delete"
+    where="source_id='8E3CFB68CF2B42A39ABBE2A8B31D006B'" />
+</AML>

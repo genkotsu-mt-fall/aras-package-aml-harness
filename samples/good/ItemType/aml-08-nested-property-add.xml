@@ -1,0 +1,14 @@
+<AML>
+  <Item type="ItemType" id="4F1AC04A2B484F3ABA4E20DB63808A88" action="edit">
+    <Relationships>
+      <Item type="RelationshipType" action="add">
+        <name>Part Document</name>
+        <Relationships>
+          <Item type="Property" id="55555555555555555555555555555555" action="add">
+            <name>state</name>
+          </Item>
+        </Relationships>
+      </Item>
+    </Relationships>
+  </Item>
+</AML>

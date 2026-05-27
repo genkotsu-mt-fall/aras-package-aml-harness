@@ -13,7 +13,7 @@ class Diagnostic:
     severity: str = "error"
 
 
-ALLOWED_ACTIONS = {"add", "edit"}
+ALLOWED_ACTIONS = {"add", "edit", "delete"}
 
 
 def check_file(path: Path) -> list[Diagnostic]:
@@ -67,6 +67,11 @@ def check_file(path: Path) -> list[Diagnostic]:
 
         diagnostics.extend(check_form_propertytype(path, root))
 
+    if root.tag == "AML" and path.parent.name == "ItemType" and path.suffix.lower() == ".xml":
+        from aml_harness.itemtype import check_itemtype_property_placement
+
+        diagnostics.extend(check_itemtype_property_placement(path, root))
+
     return diagnostics
 
 
@@ -115,6 +120,7 @@ def check_item(path: Path, item: ET.Element) -> list[Diagnostic]:
     item_type = item.attrib.get("type")
     action = item.attrib.get("action")
     item_id = item.attrib.get("id")
+    where = item.attrib.get("where")
 
     if not item_type:
         diagnostics.append(
@@ -138,17 +144,27 @@ def check_item(path: Path, item: ET.Element) -> list[Diagnostic]:
             Diagnostic(
                 file_path=str(path),
                 rule_id="AML005",
-                message="<Item> action must be add or edit",
+                message="<Item> action must be add, edit, or delete",
             )
         )
 
-    if not item_id:
+    if not _has_item_target(action, item_id, where):
         diagnostics.append(
             Diagnostic(
                 file_path=str(path),
                 rule_id="AML006",
-                message="<Item> must have id attribute",
+                message="<Item> must have id attribute or non-empty where attribute for delete",
             )
         )
 
     return diagnostics
+
+
+def _has_item_target(action: str | None, item_id: str | None, where: str | None) -> bool:
+    if item_id:
+        return True
+
+    if action == "delete" and where is not None and where.strip():
+        return True
+
+    return False
