@@ -1,0 +1,16 @@
+<AML>
+  <Item type="Form" id="CAF99D0A8E6E44E9A681C38015FACE91" action="add">
+    <name>Part</name>
+    <Relationships>
+      <Item type="Body" id="83907DEF8B3044A08BDCBB77B1C0517E" action="add">
+        <Relationships>
+          <Item type="Field" id="A1C844572D9648B58CB55074C5FAE572" action="add">
+            <field_type>text</field_type>
+            <propertytype_id keyed_name="custom_state_text" type="Property">04EB70FA8BF04F2FBA12095F56F011A2</propertytype_id>
+            <name>state</name>
+          </Item>
+        </Relationships>
+      </Item>
+    </Relationships>
+  </Item>
+</AML>

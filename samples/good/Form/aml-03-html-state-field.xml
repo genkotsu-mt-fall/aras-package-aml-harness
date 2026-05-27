@@ -1,0 +1,18 @@
+<AML>
+  <Item type="Form" id="CAF99D0A8E6E44E9A681C38015FACE91" action="add">
+    <name>Document</name>
+    <Relationships>
+      <Item type="Body" id="1616C23245254BAD80BECBEC29A02D16" action="add">
+        <Relationships>
+          <Item type="Field" id="2953A7658D0A43838F5E2E5284D6EB45" action="add">
+            <field_type>html</field_type>
+            <html_code><![CDATA[<input type="text" name="state" disabled value="STATE" populate="1"/>]]></html_code>
+            <label xml:lang="en">State</label>
+            <source_id keyed_name="1616C23245254BAD80BECBEC29A02D16" type="Body">1616C23245254BAD80BECBEC29A02D16</source_id>
+            <name>state</name>
+          </Item>
+        </Relationships>
+      </Item>
+    </Relationships>
+  </Item>
+</AML>

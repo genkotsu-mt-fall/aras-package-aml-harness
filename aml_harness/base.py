@@ -60,7 +60,14 @@ def check_file(path: Path) -> list[Diagnostic]:
             )
         ]
 
-    return check_base_aml(path, root)
+    diagnostics = check_base_aml(path, root)
+
+    if root.tag == "AML" and path.parent.name == "Form" and path.suffix.lower() == ".xml":
+        from aml_harness.form import check_form_propertytype
+
+        diagnostics.extend(check_form_propertytype(path, root))
+
+    return diagnostics
 
 
 def check_base_aml(path: Path, root: ET.Element) -> list[Diagnostic]:

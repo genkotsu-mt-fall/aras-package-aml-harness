@@ -1,0 +1,16 @@
+<AML>
+  <Item type="Form" id="CAF99D0A8E6E44E9A681C38015FACE91" action="add">
+    <name>Part</name>
+    <Relationships>
+      <Item type="Body" id="83907DEF8B3044A08BDCBB77B1C0517E" action="add">
+        <Relationships>
+          <Item type="Field" id="1466E45F42A24E96AEFC7E2669037D6A" action="add">
+            <field_type>text</field_type>
+            <label xml:lang="en">State</label>
+            <name>state</name>
+          </Item>
+        </Relationships>
+      </Item>
+    </Relationships>
+  </Item>
+</AML>

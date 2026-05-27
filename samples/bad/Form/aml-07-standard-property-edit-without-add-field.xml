@@ -1,0 +1,10 @@
+<AML>
+  <Item type="Field" id="1466E45F42A24E96AEFC7E2669037D6A" action="edit">
+    <propertytype_id>
+      <Item type="Property" action="get" select="id">
+        <name>state</name>
+        <source_id type="ItemType" keyed_name="Part">4F1AC04A2B484F3ABA4E20DB63808A88</source_id>
+      </Item>
+    </propertytype_id>
+  </Item>
+</AML>

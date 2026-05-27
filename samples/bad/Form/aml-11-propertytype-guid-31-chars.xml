@@ -1,0 +1,16 @@
+<AML>
+  <Item type="Form" id="CAF99D0A8E6E44E9A681C38015FACE91" action="add">
+    <name>Part</name>
+    <Relationships>
+      <Item type="Body" id="83907DEF8B3044A08BDCBB77B1C0517E" action="add">
+        <Relationships>
+          <Item type="Field" id="FD36E7C8554E49098C55D72307BF1639" action="add">
+            <field_type>textarea</field_type>
+            <propertytype_id keyed_name="description" type="Property">04EB70FA8BF04F2FBA12095F56F011A</propertytype_id>
+            <name>description</name>
+          </Item>
+        </Relationships>
+      </Item>
+    </Relationships>
+  </Item>
+</AML>
