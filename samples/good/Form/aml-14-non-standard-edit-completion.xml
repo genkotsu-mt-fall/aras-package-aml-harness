@@ -1,0 +1,23 @@
+<AML>
+  <Item type="Form" id="CAF99D0A8E6E44E9A681C38015FACE91" action="add">
+    <name>Part BOM</name>
+    <Relationships>
+      <Item type="Body" id="83907DEF8B3044A08BDCBB77B1C0517E" action="add">
+        <Relationships>
+          <Item type="Field" id="BD13E7C8554E49098C55D72307BF1639" action="add">
+            <field_type>item</field_type>
+            <name>related_id</name>
+          </Item>
+        </Relationships>
+      </Item>
+    </Relationships>
+  </Item>
+  <Item type="Field" id="BD13E7C8554E49098C55D72307BF1639" action="edit">
+    <propertytype_id>
+      <Item type="Property" action="get" select="id">
+        <name>related_id</name>
+        <source_id type="ItemType" keyed_name="Part BOM">4F1AC04A2B484F3ABA4E20DB63808A88</source_id>
+      </Item>
+    </propertytype_id>
+  </Item>
+</AML>

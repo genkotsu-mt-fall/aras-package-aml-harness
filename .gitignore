@@ -23,3 +23,6 @@ runs/*
 Thumbs.db
 .vscode/
 .idea/
+
+public/
+tasks/

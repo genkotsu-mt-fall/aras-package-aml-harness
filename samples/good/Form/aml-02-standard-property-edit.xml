@@ -1,0 +1,25 @@
+<AML>
+  <Item type="Form" id="CAF99D0A8E6E44E9A681C38015FACE91" action="add">
+    <name>Part</name>
+    <Relationships>
+      <Item type="Body" id="83907DEF8B3044A08BDCBB77B1C0517E" action="add">
+        <source_id keyed_name="Part" type="Form">CAF99D0A8E6E44E9A681C38015FACE91</source_id>
+        <Relationships>
+          <Item type="Field" id="B04912C5135A43A19CD59589626DF5AF" action="add">
+            <field_type>class structure</field_type>
+            <source_id keyed_name="83907DEF8B3044A08BDCBB77B1C0517E" type="Body">83907DEF8B3044A08BDCBB77B1C0517E</source_id>
+            <name>classification</name>
+          </Item>
+        </Relationships>
+      </Item>
+    </Relationships>
+  </Item>
+  <Item type="Field" id="B04912C5135A43A19CD59589626DF5AF" action="edit">
+    <propertytype_id>
+      <Item type="Property" action="get" select="id">
+        <name>classification</name>
+        <source_id type="ItemType" keyed_name="Part">4F1AC04A2B484F3ABA4E20DB63808A88</source_id>
+      </Item>
+    </propertytype_id>
+  </Item>
+</AML>

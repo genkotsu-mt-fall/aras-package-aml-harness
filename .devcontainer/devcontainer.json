@@ -5,11 +5,19 @@
     "context": ".."
   },
   "workspaceFolder": "/workspace",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
+  "mounts": [
+    "source=${localEnv:USERPROFILE}/.codex/auth.json,target=/root/.codex/auth.json,type=bind",
+    "source=${localEnv:USERPROFILE}/.codex/config.toml,target=/root/.codex/config.toml,type=bind"
+  ],
+  "containerEnv": {
+    "CODEX_HOME": "/root/.codex"
+  },
   "customizations": {
     "vscode": {
       "extensions": [
         "GitHub.copilot",
-        "GitHub.copilot-chat",
+        "GitHub.copilot-chat"
       ],
       "settings": {
         "python.defaultInterpreterPath": "/usr/local/bin/python"
