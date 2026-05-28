@@ -1,0 +1,5 @@
+<AML>
+  <Item type="ItemType" id="4F1AC04A2B484F3ABA4E20DB63808A88" action="add">
+    <name>Part</name>
+  </Item>
+</AML>

@@ -1,0 +1,11 @@
+<AML>
+  <Item type="ItemType" id="4F1AC04A2B484F3ABA4E20DB63808A88" action="add">
+    <name>Part</name>
+  </Item>
+  <Item type="ItemType" id="4F1AC04A2B484F3ABA4E20DB63808A88" action="edit">
+    <name>Part</name>
+  </Item>
+  <Item type="Field" id="91D77D8688BD4D16B67406F873DF2935" action="add">
+    <name>control_type</name>
+  </Item>
+</AML>
