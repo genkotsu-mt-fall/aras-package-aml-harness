@@ -1,0 +1,15 @@
+<AML>
+  <Item type="Form" id="F0000000000000000000000000000007" action="add">
+    <Relationships>
+      <Item type="Body" id="B0000000000000000000000000000007" action="add">
+        <Relationships>
+          <Item type="Field" id="D0000000000000000000000000000007" action="add">
+            <field_type>text</field_type>
+            <propertytype_id keyed_name="state" type="Property">AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA</propertytype_id>
+            <name>state</name>
+          </Item>
+        </Relationships>
+      </Item>
+    </Relationships>
+  </Item>
+</AML>

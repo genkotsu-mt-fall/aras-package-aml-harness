@@ -1,0 +1,10 @@
+<AML>
+  <Item type="Field" id="E0000000000000000000000000000008" action="edit">
+    <propertytype_id>
+      <Item type="Property" action="get" select="id">
+        <name>owned_by_id</name>
+        <source_id type="ItemType" keyed_name="SavedSearch">18C15AB147F84834874F2E0CB6B8B4C0</source_id>
+      </Item>
+    </propertytype_id>
+  </Item>
+</AML>

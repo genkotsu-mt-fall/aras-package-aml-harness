@@ -1,0 +1,10 @@
+<AML>
+  <Item type="Field" id="E0000000000000000000000000000005" action="edit">
+    <propertytype_id>
+      <Item type="Property" action="get" select="id">
+        <name>custom_property</name>
+        <source_id type="ItemType" keyed_name="Part">11111111111111111111111111111111</source_id>
+      </Item>
+    </propertytype_id>
+  </Item>
+</AML>
