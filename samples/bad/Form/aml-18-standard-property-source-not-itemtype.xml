@@ -1,0 +1,22 @@
+<AML>
+  <Item type="Form" id="F0000000000000000000000000000011" action="add">
+    <Relationships>
+      <Item type="Body" id="B0000000000000000000000000000011" action="add">
+        <Relationships>
+          <Item type="Field" id="E0000000000000000000000000000011" action="add">
+            <field_type>item</field_type>
+            <name>share_with</name>
+          </Item>
+        </Relationships>
+      </Item>
+    </Relationships>
+  </Item>
+  <Item type="Field" id="E0000000000000000000000000000011" action="edit">
+    <propertytype_id>
+      <Item type="Property" action="get" select="id">
+        <name>owned_by_id</name>
+        <source_id type="Form" keyed_name="SavedSearch">18C15AB147F84834874F2E0CB6B8B4C0</source_id>
+      </Item>
+    </propertytype_id>
+  </Item>
+</AML>

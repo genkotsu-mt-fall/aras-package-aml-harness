@@ -1,0 +1,15 @@
+<AML>
+  <Item type="Form" id="F0000000000000000000000000000002" action="add">
+    <Relationships>
+      <Item type="Body" id="B0000000000000000000000000000002" action="add">
+        <Relationships>
+          <Item type="Field" id="D0000000000000000000000000000002" action="add">
+            <field_type>text</field_type>
+            <propertytype_id keyed_name="authoring_tool_version" type="Property">894E0A47F1BC4CA0A40C3DA13CE73EA9</propertytype_id>
+            <name>authoring_tool_ver</name>
+          </Item>
+        </Relationships>
+      </Item>
+    </Relationships>
+  </Item>
+</AML>

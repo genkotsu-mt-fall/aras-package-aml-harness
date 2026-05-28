@@ -23,6 +23,15 @@ JUDGEMENT="$(awk '
   }
 ' "$FILE")"
 
+# Fallback: エージェントが会話形式で出力した場合、インライン判定を検索する
+if [[ -z "$JUDGEMENT" ]]; then
+  if grep -qF '判定は `OK`' "$FILE" 2>/dev/null || grep -qF "判定は\`OK\`" "$FILE" 2>/dev/null; then
+    JUDGEMENT="OK"
+  elif grep -qF '判定は `修正が必要`' "$FILE" 2>/dev/null || grep -qF "判定は\`修正が必要\`" "$FILE" 2>/dev/null; then
+    JUDGEMENT="修正が必要"
+  fi
+fi
+
 case "$JUDGEMENT" in
   OK|"修正が必要")
     printf "%s\n" "$JUDGEMENT"

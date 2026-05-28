@@ -109,19 +109,6 @@ def check_form_propertytype(path: Path, root: ET.Element) -> list[Diagnostic]:
             )
             continue
 
-        field_name = _child_text(add_field, "name")
-        if property_name != field_name:
-            diagnostics.append(
-                Diagnostic(
-                    file_path=str(path),
-                    rule_id="FORM005",
-                    message=(
-                        f"Standard property {field_name} Property name must match "
-                        "Field name"
-                    ),
-                )
-            )
-
         source_id = property_item.find("source_id")
         if source_id is None or source_id.attrib.get("type") != "ItemType":
             diagnostics.append(
