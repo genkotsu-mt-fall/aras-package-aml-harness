@@ -1,0 +1,7 @@
+<imports>
+  <package name="com.aras.innovator.solution.PLM" path=".\">
+    <metadata>
+      <dependson />
+    </metadata>
+  </package>
+</imports>

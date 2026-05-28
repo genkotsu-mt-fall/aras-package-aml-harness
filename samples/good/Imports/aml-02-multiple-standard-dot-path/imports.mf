@@ -1,0 +1,9 @@
+<imports>
+  <package name="com.aras.innovator.admin" path=".\" />
+  <package name="com.aras.innovator.dashboard" path=".\">
+    <dependson name="com.aras.innovator.i18n" />
+  </package>
+  <package name="com.aras.innovator.core" path=".\">
+    <dependson name="com.aras.innovator.admin" />
+  </package>
+</imports>

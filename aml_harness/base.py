@@ -60,6 +60,11 @@ def check_file(path: Path) -> list[Diagnostic]:
             )
         ]
 
+    if path.name.lower() == "imports.mf":
+        from aml_harness.imports_manifest import check_imports_manifest
+
+        return check_imports_manifest(path, root)
+
     diagnostics = check_base_aml(path, root)
 
     if root.tag == "AML" and path.parent.name == "Form" and path.suffix.lower() == ".xml":
