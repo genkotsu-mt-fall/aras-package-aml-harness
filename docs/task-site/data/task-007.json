@@ -1,0 +1,150 @@
+{
+  "task_id": "task-007",
+  "title": "public 標準パッケージの delete where 過検出修正",
+  "status": "完了",
+  "summary": "public 標準パッケージの ItemType XML で使われるトップレベル View/Form の action=\"delete\" と where 指定を base ルールで許容した。ItemType 失敗 7 ファイル、ItemType 全体、RelationshipType 全体の public 再検証はいずれも成功した。",
+  "change_plan": {
+    "background": "task-006 の public-check で ITEMTYPE001 の過検出はなかったが、既存 base ルールが標準 XML 内の action=\"delete\" と where 指定 delete を許容せず失敗していた。public の ItemType と RelationshipType には View/Form のトップレベル delete が多数存在していた。",
+    "goal": "base ルールで action=\"delete\" を許容し、delete では非空の where 属性を id の代替となる対象指定として扱う。既存の add/edit に対する id 必須チェックと未許可 action の検出は維持する。",
+    "scope": [
+      "base ルールの Item action 許容値",
+      "トップレベル Item の add/edit/delete 別の対象指定チェック",
+      "public/PLM/Import/ItemType/*.xml の失敗 7 ファイル再検証",
+      "public/PLM/Import/ItemType/*.xml 全体の再検証"
+    ],
+    "out_of_scope": [
+      "public 配下 XML の変更",
+      "task-006 の ITEMTYPE001 検出条件の変更",
+      "where 条件式の完全な構文検証",
+      "delete 対象 type ごとの where プロパティ名制限",
+      "Aras サーバー側インポート処理の完全な再現"
+    ]
+  },
+  "reviews": [
+    {
+      "kind": "public-check",
+      "file": "tasks/task-007/public-check001.md",
+      "judgement": "OK",
+      "findings": [
+        "ItemType 失敗 7 ファイルは成功 7 件、失敗 0 件だった",
+        "public/PLM/Import/ItemType/*.xml は 30 件すべて成功した",
+        "public/PLM/Import/RelationshipType/*.xml は 52 件すべて成功した",
+        "確認範囲では action=\"delete\" と where 指定 delete に対する AML005 / AML006 の過検出は再発しなかった"
+      ],
+      "result": "public 標準 XML との不整合は確認されず、Harness 最終検証へ進む扱いになった。"
+    },
+    {
+      "kind": "test-cases",
+      "file": "tasks/task-007/test-cases-review001.md",
+      "judgement": "OK",
+      "findings": [
+        "No.1 から No.13 は tests/test_base_delete.py と samples に対応していた",
+        "不足または過剰なテストはないとされた",
+        "当時は tests.test_base_delete が実装未対応により失敗していたが、テストケース対応の不備ではないとされた"
+      ],
+      "result": "テストケースレビューは OK とされ、実装対応へ進む扱いになった。"
+    },
+    {
+      "kind": "test-cases",
+      "file": "tasks/task-007/test-cases-review002.md",
+      "judgement": "修正が必要",
+      "findings": [
+        "AML パターン自体は public の実 XML と概ね整合していた",
+        "change-plan の完了条件にある public XML 再検証が test-cases.md に明示されていない点が指摘された",
+        "失敗 7 ファイルまたは public/PLM/Import/ItemType/*.xml 相当の検証観点追加が必要とされた"
+      ],
+      "result": "public 再検証の観点が test-cases.md に追加され、後続レビューで OK となった。"
+    },
+    {
+      "kind": "test-cases",
+      "file": "tasks/task-007/test-cases-review003.md",
+      "judgement": "OK",
+      "findings": [
+        "change-plan と public 標準 XML の確認範囲では修正必須の不整合は見つからなかった",
+        "View の where=\"source_id='...'\" と Form の where=\"name='...'\" を分けて確認する判断は妥当とされた",
+        "失敗 7 ファイルの直接回帰と ItemType 全体の再検証はいずれも有用とされた",
+        "id なしかつ非空 where ありのトップレベル delete を許容する方針は public 実例と整合していた"
+      ],
+      "result": "テストケースは OK とされ、テストコード実装へ進む扱いになった。"
+    },
+    {
+      "kind": "test-code",
+      "file": "tasks/task-007/test-code-review001.md",
+      "judgement": "OK",
+      "findings": [
+        "No.1 から No.13 は tests/test_base_delete.py と samples に対応していた",
+        "不足または過剰なテストはないとされた",
+        "当時のテスト失敗は実装未対応によるもので、テストケース対応の不備ではないとされた"
+      ],
+      "result": "テストコードレビューは OK とされ、アプリ実装へ進む扱いになった。"
+    }
+  ],
+  "implementation": {
+    "tests": [
+      "tests/test_base_delete.py にトップレベル View delete where 指定の正常系を追加",
+      "トップレベル Form delete where 指定の正常系を追加",
+      "ItemType または RelationshipType の add と後続 View/Form delete の組み合わせを正常系として確認",
+      "delete の where なし、空文字、空白のみを異常系として確認",
+      "未許可 action は AML005、add/edit の id なしは AML006 のまま失敗する回帰確認を追加",
+      "public-check で失敗した ItemType 7 ファイルと ItemType 全体 30 件の回帰確認を追加"
+    ],
+    "samples": [
+      "samples/good/Base に View delete where source_id、Form delete where name のサンプルを追加",
+      "samples/good/Base に ItemType add と View/Form delete の組み合わせサンプルを追加",
+      "samples/good/Base に RelationshipType add と View/Form delete の組み合わせサンプルを追加",
+      "samples/good/Base に delete の最小非空 where、id 付き delete、ネスト Property edit where のサンプルを追加",
+      "samples/bad/Base に delete の where なし、空文字、空白のみのサンプルを追加",
+      "samples/bad/Base に add/edit の id なしと未許可 action の回帰サンプルを追加"
+    ],
+    "app": [
+      "aml_harness/base.py の ALLOWED_ACTIONS に delete を追加",
+      "add/edit ではトップレベル Item の id 必須チェックを維持",
+      "delete では非空の where 属性を必須にし、where なしや空白のみを AML007 として検出",
+      "未許可 action の AML005 メッセージを add、edit、delete 対応に更新"
+    ],
+    "verification": [
+      "python -m aml_harness 対象 ItemType 失敗 7 ファイルは成功 7 件、失敗 0 件",
+      "python -m aml_harness public/PLM/Import/ItemType/*.xml は 30 件成功",
+      "python -m aml_harness public/PLM/Import/RelationshipType/*.xml は 52 件成功",
+      "public-check001.md では確認範囲の標準 XML との不整合なしと記録されている"
+    ]
+  },
+  "artifacts": [
+    {
+      "label": "change-plan.md",
+      "path": "tasks/task-007/change-plan.md",
+      "type": "change-plan"
+    },
+    {
+      "label": "test-cases.md",
+      "path": "tasks/task-007/test-cases.md",
+      "type": "test-cases"
+    },
+    {
+      "label": "public-check001.md",
+      "path": "tasks/task-007/public-check001.md",
+      "type": "public-check"
+    },
+    {
+      "label": "test-cases-review001.md",
+      "path": "tasks/task-007/test-cases-review001.md",
+      "type": "test-cases-review"
+    },
+    {
+      "label": "test-cases-review002.md",
+      "path": "tasks/task-007/test-cases-review002.md",
+      "type": "test-cases-review"
+    },
+    {
+      "label": "test-cases-review003.md",
+      "path": "tasks/task-007/test-cases-review003.md",
+      "type": "test-cases-review"
+    },
+    {
+      "label": "test-code-review001.md",
+      "path": "tasks/task-007/test-code-review001.md",
+      "type": "test-code-review"
+    }
+  ],
+  "updated_at": "2026-05-29"
+}

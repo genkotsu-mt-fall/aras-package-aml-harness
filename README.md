@@ -160,6 +160,26 @@ scripts/20-implement-tests.sh tasks/task-001 "test_base.py は薄く保つ"
 scripts/60-check-public.sh tasks/task-001 001 "Form 機能なので public/PLM/Import/Form/*.xml を確認する"
 ```
 
+## タスク履歴サイト
+
+`tasks/` 配下の各タスクについて、変更プラン、レビュー、実装内容を静的サイトで確認できます。
+
+```bash
+# 差分チェックだけ行う
+scripts/80-check-task-site.sh
+
+# 変更があった task だけ Codex で JSON 要約を生成する
+scripts/80-update-task-site.sh
+
+# 1 task だけ再生成する
+scripts/80-summarize-task-site.sh tasks/task-010
+
+# manifest だけ作り直す
+scripts/81-build-task-site-manifest.sh
+```
+
+サイト本体は `docs/task-site/index.html` です。`fetch` で `docs/task-site/data/*.json` を読むため、リポジトリルートをローカル HTTP サーバーで配信し、`/docs/task-site/index.html` を開いてください。
+
 ## Windows 実行ファイルのビルド
 
 ```powershell

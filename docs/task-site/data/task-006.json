@@ -1,0 +1,133 @@
+{
+  "task_id": "task-006",
+  "title": "ItemType XML の Property 配置チェック追加",
+  "status": "完了",
+  "summary": "ItemType XML で標準プロパティ上書きと ItemType 固有プロパティ追加の Property 配置を検査する ITEMTYPE001 を追加した。public 実例に合わせ、release_date の action=\"add\" や ItemType 以外のパス、ネストした Property は過検出しない扱いにした。",
+  "change_plan": {
+    "background": "ItemType/*.xml では標準プロパティ上書きは Property action=\"edit\"、固有プロパティ追加は Property action=\"add\" として配置される。public 標準パッケージでは release_date が Property action=\"add\" の例を持つため、標準プロパティ候補を一律に edit 必須にはできない。",
+    "goal": "ItemType 直下の Relationships/Item type=\"Property\" を対象に、public で上書き実例がある標準プロパティの action=\"add\" を検出する。固有プロパティ追加、release_date、対象外パス、ネストした Property は成功扱いにする。",
+    "scope": [
+      "ItemType/*.xml の AML ファイル",
+      "AML/Item[@type=\"ItemType\"] の action=\"add\" または action=\"edit\"",
+      "ItemType 直下の Relationships/Item[@type=\"Property\"]",
+      "public 実例で action=\"edit\" が確認できた標準プロパティ名"
+    ],
+    "out_of_scope": [
+      "Form/*.xml の Field / propertytype_id チェック",
+      "Property のデータ型、ラベル、sort_order などの詳細妥当性",
+      "RelationshipType/*.xml 内に埋め込まれた relationship ItemType の Property 配置チェック",
+      "source_id の GUID 実在確認や where 条件式の完全な構文検証",
+      "Aras サーバー側インポートの完全な再現"
+    ]
+  },
+  "reviews": [
+    {
+      "kind": "public-check",
+      "file": "tasks/task-006/public-check001.md",
+      "judgement": "修正が必要",
+      "findings": [
+        "ITEMTYPE001 は 0 件で、今回の ItemType Property 配置チェック自体の過検出は確認されなかった",
+        "当時の public ItemType XML 30 件中 7 件が既存 base ルールの AML005 / AML006 で失敗した",
+        "失敗原因は標準 XML 内の action=\"delete\" と where 指定 delete を base ルールが許容しないことだった"
+      ],
+      "result": "コード、tests、samples、public 配下は変更せず、既存 base ルール側の修正が必要な結果として記録された。"
+    },
+    {
+      "kind": "test-cases",
+      "file": "tasks/task-006/test-cases-review001.md",
+      "judgement": "修正が必要",
+      "findings": [
+        "本文は public 標準パッケージ検証として記録されている",
+        "public/PLM/Import/ItemType/*.xml 30 件中 23 件成功、7 件失敗だった",
+        "ITEMTYPE001 の検出件数は 0 件で、標準プロパティ対象リストと release_date 例外の過検出は確認されなかった",
+        "失敗はトップレベル View/Form の action=\"delete\" と where 指定 delete に対する AML005 / AML006 だった"
+      ],
+      "result": "今回の ITEMTYPE001 ではなく既存 base ルールの不整合として、アプリ実装見直しが必要とされた。"
+    },
+    {
+      "kind": "test-cases",
+      "file": "tasks/task-006/test-cases-review002.md",
+      "judgement": "OK",
+      "findings": [
+        "change-plan、test-cases、public 標準パッケージ XML を照合し、テストケースの修正が必要な不整合は見つからなかった",
+        "Part.xml の cost、classification、major_rev、state、superseded_date、item_number の配置が No.2、No.3、No.4、No.11、No.12、No.13 と整合した",
+        "CAD.xml の created_on などの Property action=\"edit\" 実例により No.5 の異常系根拠が妥当とされた",
+        "Simple ECO.xml の release_date action=\"add\" 実例により No.6 の成功扱いが妥当とされた",
+        "RelationshipType/Part Document.xml の埋め込み ItemType は No.10 の非対象根拠と整合した"
+      ],
+      "result": "テストケースは OK とされ、テストコード実装へ進む扱いになった。"
+    },
+    {
+      "kind": "test-code",
+      "file": "tasks/task-006/test-code-review001.md",
+      "judgement": "OK",
+      "findings": [
+        "指摘事項、不足しているテスト、削除または統合した方がよいテストはいずれもなし",
+        "当時の python -m unittest は ITEMTYPE001 期待の 4 件が失敗していた",
+        "失敗は実装未対応を示すもので、test-cases と unittest/samples の対応不備ではないとされた"
+      ],
+      "result": "テストコードレビューは OK とされ、アプリ実装へ進む扱いになった。"
+    }
+  ],
+  "implementation": {
+    "tests": [
+      "tests/test_itemtype_property.py に No.1 から No.13 対応の unittest を追加",
+      "標準プロパティ state の action=\"edit\" 正常系と action=\"add\" 異常系を確認",
+      "created_on と classification の action=\"add\" で ITEMTYPE001 を期待",
+      "ItemType action=\"add\" 配下と action=\"edit\" 配下の固有プロパティ追加を正常系として確認",
+      "release_date action=\"add\"、ItemType 以外のパス、ネストした Property、Form/RelationshipType パスを対象外または正常系として確認",
+      "複数トップレベル ItemType の正常配置と後段 ItemType の標準プロパティ違反を確認"
+    ],
+    "samples": [
+      "samples/good/ItemType に標準 state edit、固有プロパティ add、release_date add、ネスト Property、複数 ItemType 正常系を追加",
+      "samples/bad/ItemType に state、created_on、classification、後段 ItemType の state add 違反を追加",
+      "samples/good/Other に ItemType パス外の state add サンプルを追加",
+      "samples/good/RelationshipType に埋め込み ItemType の Property add サンプルを追加"
+    ],
+    "app": [
+      "aml_harness/itemtype.py に STANDARD_PROPERTY_EDIT_NAMES と check_itemtype_property_placement を追加",
+      "ItemType/*.xml のトップレベル ItemType action=\"add\" / action=\"edit\" 直下 Property だけを検査するようにした",
+      "Property action=\"add\" かつ name が public で edit 実例のある標準プロパティの場合に ITEMTYPE001 を返すようにした",
+      "release_date は STANDARD_PROPERTY_EDIT_NAMES に含めず、action=\"add\" を失敗にしないようにした",
+      "aml_harness/base.py から ItemType パスの AML に対して itemtype チェックを呼び出すようにした"
+    ],
+    "verification": [
+      "python -m unittest は 78 件成功",
+      "python -m aml_harness 'public/PLM/Import/ItemType/*.xml' は 30 件成功",
+      "public-check001.md では ITEMTYPE001 の public 過検出は 0 件と記録されている"
+    ]
+  },
+  "artifacts": [
+    {
+      "label": "change-plan.md",
+      "path": "tasks/task-006/change-plan.md",
+      "type": "change-plan"
+    },
+    {
+      "label": "test-cases.md",
+      "path": "tasks/task-006/test-cases.md",
+      "type": "test-cases"
+    },
+    {
+      "label": "public-check001.md",
+      "path": "tasks/task-006/public-check001.md",
+      "type": "public-check"
+    },
+    {
+      "label": "test-cases-review001.md",
+      "path": "tasks/task-006/test-cases-review001.md",
+      "type": "test-cases-review"
+    },
+    {
+      "label": "test-cases-review002.md",
+      "path": "tasks/task-006/test-cases-review002.md",
+      "type": "test-cases-review"
+    },
+    {
+      "label": "test-code-review001.md",
+      "path": "tasks/task-006/test-code-review001.md",
+      "type": "test-code-review"
+    }
+  ],
+  "updated_at": "2026-05-29"
+}
