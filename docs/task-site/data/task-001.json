@@ -1,0 +1,63 @@
+{
+  "task_id": "task-001",
+  "title": "最小構成 AML 基本チェッカー",
+  "status": "要確認",
+  "summary": "Aras Innovator パッケージ開発向けに、AML XML の共通エンベロープ構造を検証する CLI の基礎を整えるタスク。レビュー成果物や実行ログは対象タスクディレクトリ内に見当たらないため、レビュー状況は要確認。",
+  "change_plan": {
+    "background": "AML XML ファイルの共通エンベロープ構造を検証できる Windows CLI ツール aml-harness.exe の基礎が必要とされている。開発時は python -m aml_harness <xml-file> で実行できることを前提にしている。",
+    "goal": "入力ファイルの存在、XML としての妥当性、<AML> と直接子 <Item> の基本属性を検証する。完了条件として unittest と good sample の CLI 実行が指定されている。",
+    "scope": [
+      "入力パスの存在とファイル種別の検証",
+      "XML パースエラーの検出",
+      "ルート要素 <AML> の検証",
+      "<AML> 直下の <Item> 存在確認",
+      "<AML> 直下の非 <Item> 要素検出",
+      "直接 <Item> の type 属性検証",
+      "直接 <Item> の action 属性検証",
+      "action add/edit の許可検証",
+      "直接 <Item> の id 属性検証"
+    ],
+    "out_of_scope": [
+      "ItemType 固有のルール",
+      "Action 固有のルール",
+      "Method 固有のルール",
+      "JSON 出力",
+      "設定ファイル",
+      "自動修正",
+      "Aras サーバーバリデーション",
+      "パッケージインポートのシミュレーション"
+    ]
+  },
+  "reviews": [],
+  "implementation": {
+    "tests": [
+      "valid base AML の正常系を unittest で検証",
+      "ルート要素、空 AML、非 Item 子要素の異常系を検証",
+      "Item の type、action、id 属性不足を検証",
+      "不正 XML と存在しないファイルの診断を検証"
+    ],
+    "samples": [
+      "samples/good/base.xml に最小構成の正常 AML を用意",
+      "samples/bad 配下に bad-root、empty-aml、invalid-action、missing-id、non-item-child の異常サンプルを用意"
+    ],
+    "app": [
+      "aml_harness.base に Diagnostic と check_file/check_base_aml/check_item を実装",
+      "ファイル存在、ファイル種別、読み取り失敗、XML パース失敗を診断化",
+      "AML ルートと直接 Item の基本属性を診断化",
+      "aml_harness.cli に glob 展開、診断表示、終了コード制御を実装",
+      "aml_harness.__main__ から CLI main を起動"
+    ],
+    "verification": [
+      "change-plan.md では python -m unittest の正常終了を完了条件に指定",
+      "change-plan.md では python -m aml_harness .\\samples\\good\\base.xml の正常終了を完了条件に指定"
+    ]
+  },
+  "artifacts": [
+    {
+      "label": "change-plan.md",
+      "path": "tasks/task-001/change-plan.md",
+      "type": "change-plan"
+    }
+  ],
+  "updated_at": "2026-05-29"
+}

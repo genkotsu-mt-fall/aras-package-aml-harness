@@ -1,0 +1,153 @@
+{
+  "task_id": "task-010",
+  "title": "FORM005 ルールの過検出修正",
+  "status": "完了",
+  "summary": "FORM005 の Field/name と Property 名の一致必須チェックが public 標準 XML と矛盾するため、過検出をなくす方針が整理された。実装では FORM005 を削除し、直接 propertytype_id と後続 edit 形式の許容ケース、既存構造不備検出、public 全体確認が追加・更新された。",
+  "change_plan": {
+    "background": "public 全体検証で SavedSearch Save Dialog.xml の share_with と owned_by_id の不一致が FORM005 として 1 件検出された。public 標準 XML には Field/name と propertytype_id の Property 名が一致しない実例が複数あった。",
+    "goal": "Field/name と Property 名の不一致自体をエラーにしないよう FORM005 チェックを削除する。FORM001、FORM002、FORM003、FORM004、FORM006 による propertytype_id の構造不備検出は維持する。",
+    "scope": [
+      "直接 propertytype_id keyed_name を持つ Field の名前一致・不一致許容",
+      "Field action=\"add\" 後に同じ id の Field action=\"edit\" で propertytype_id を設定する形式の名前一致・不一致許容",
+      "Property action=\"get\" select=\"id\" と source_id type=\"ItemType\" の構造確認",
+      "FORM005 期待のテストと sample の見直し",
+      "public 配下 XML 全体の回帰確認"
+    ],
+    "out_of_scope": [
+      "propertytype_id が存在しない Field の妥当性検証",
+      "source_id が実在する Body または ItemType を参照しているかの検証",
+      "propertytype_id が参照する Property の実在解決",
+      "Field action=\"edit\" が対応する Field action=\"add\" より前に現れる形式の許容可否",
+      "Field/name の空または欠落の妥当性検証",
+      "Form、Body、Field、Field Event の Relationship 階層に対する新規ルール追加"
+    ]
+  },
+  "reviews": [
+    {
+      "kind": "public-check",
+      "file": "tasks/task-010/public-check001.md",
+      "judgement": "OK",
+      "findings": [
+        "public の Form 直下 XML 291 件が成功した",
+        "public 全体 XML 5151 件が成功した",
+        "FORM005 削除に関係する名前不一致の標準 XML 実例を含めて過検出は確認されなかった"
+      ],
+      "result": "public 標準パッケージ確認は OK とされた。"
+    },
+    {
+      "kind": "test-cases",
+      "file": "tasks/task-010/test-cases-review001.md",
+      "judgement": "OK",
+      "findings": [
+        "public/**/Form/*.xml 291 件が成功した",
+        "public/**/*.xml 5151 件が成功した",
+        "標準 XML との不整合はないとされた",
+        "Field/name と propertytype_id の Property 名が一致しない標準 XML 実例も成功した"
+      ],
+      "result": "標準 XML に対する過検出候補は確認されず、Harness 最終検証へ進む扱いになった。"
+    },
+    {
+      "kind": "test-cases",
+      "file": "tasks/task-010/test-cases-review002.md",
+      "judgement": "OK",
+      "findings": [
+        "test-cases.md の No.1 から No.17 が tests/test_form_propertytype.py の test_no_001 から test_no_017 に対応していた",
+        "正常系、異常系、境界値、回帰確認が unittest の assert と sample XML または public XML 入力に具体化されていた",
+        "旧 FORM005 bad sample 相当は成功に変わる回帰確認として残す意義があるとされた",
+        "現時点の実装では FORM005 がまだ出るが、テストケースと unittest/samples の対応不備ではないとされた"
+      ],
+      "result": "テストケースとテストコードの対応は OK とされ、アプリ実装へ進む扱いになった。"
+    },
+    {
+      "kind": "test-code",
+      "file": "tasks/task-010/test-code-review001.md",
+      "judgement": "修正が必要",
+      "findings": [
+        "samples/bad/Form/aml-09-standard-property-name-mismatch.xml が旧 FORM005 用 bad sample として残っていると指摘された",
+        "Field/name と後続 edit の Property 名が一致しないことだけを理由に bad sample とする分類は test-cases.md と矛盾するとされた",
+        "削除するか good sample へ移動し、bad sample として残す場合は FORM003、FORM004、FORM006 などの構造不備を明確に含める必要があるとされた"
+      ],
+      "result": "旧 FORM005 bad sample の分類修正が必要とされた。"
+    },
+    {
+      "kind": "test-code",
+      "file": "tasks/task-010/test-code-review002.md",
+      "judgement": "OK",
+      "findings": [
+        "不足しているテストはないとされた",
+        "削除または統合した方がよいテストはないとされた",
+        "レビュー結果は test-cases-review002.md に出力済みと記録された"
+      ],
+      "result": "追加修正なしで OK とされ、アプリ実装へ進む扱いになった。"
+    }
+  ],
+  "implementation": {
+    "tests": [
+      "tests/test_form_propertytype.py に No.1 から No.17 の unittest を追加・更新",
+      "直接 propertytype_id keyed_name の名前一致と不一致を成功として確認",
+      "Field add 後の同じ id の Field edit による標準 Property 設定で名前一致と不一致を成功として確認",
+      "非標準 Property edit、空の Field/name、Form 以外のパスを成功として確認",
+      "直接 propertytype_id の GUID 不正、標準 Property 直接指定、対応 add Field 不足、Property action/select 不備、source_id type 不正を異常系として確認",
+      "発端の SavedSearch Save Dialog.xml と public 全体 XML を回帰確認"
+    ],
+    "samples": [
+      "samples/good/Form に直接 keyed_name の一致・不一致 sample を追加",
+      "samples/good/Form に標準 Property edit の名前一致・不一致 sample を追加",
+      "samples/good/Form に非標準 Property edit、空 Field/name、旧 FORM005 bad sample 相当の成功 sample を追加",
+      "samples/bad/Form に直接 propertytype_id 不正、標準 Property 直接指定、対応 add Field 不足、Property action/select/source_id 不備の sample を追加・更新",
+      "samples/good/ItemType に Form 以外のパスでは Form 専用チェックを適用しない回帰 sample を追加"
+    ],
+    "app": [
+      "aml_harness/form.py から FORM005 の Field/name と Property 名の一致チェックを削除",
+      "直接 propertytype_id の 32 文字 GUID 検証 FORM001 を維持",
+      "標準 Property の直接 propertytype_id 指定を検出する FORM002 を維持",
+      "標準 Property edit の対応 add Field、Property action=\"get\" select=\"id\"、source_id type=\"ItemType\" 検証を維持",
+      "Form ディレクトリ直下の XML のみを Form 専用チェック対象にする挙動を維持"
+    ],
+    "verification": [
+      "test-cases-review001.md で public Form 291 件と public 全体 5151 件の成功が記録された",
+      "test-cases-review002.md で No.1 から No.17 の unittest と sample/public 入力の対応が確認された",
+      "test-code-review001.md で旧 FORM005 bad sample 分類の修正必要が指摘された",
+      "test-code-review002.md で追加修正なしの OK が記録された",
+      "public-check001.md で public Form 291 件と public 全体 5151 件の成功が記録された"
+    ]
+  },
+  "artifacts": [
+    {
+      "label": "change-plan.md",
+      "path": "tasks/task-010/change-plan.md",
+      "type": "change-plan"
+    },
+    {
+      "label": "test-cases.md",
+      "path": "tasks/task-010/test-cases.md",
+      "type": "test-cases"
+    },
+    {
+      "label": "public-check001.md",
+      "path": "tasks/task-010/public-check001.md",
+      "type": "public-check"
+    },
+    {
+      "label": "test-cases-review001.md",
+      "path": "tasks/task-010/test-cases-review001.md",
+      "type": "test-cases-review"
+    },
+    {
+      "label": "test-cases-review002.md",
+      "path": "tasks/task-010/test-cases-review002.md",
+      "type": "test-cases-review"
+    },
+    {
+      "label": "test-code-review001.md",
+      "path": "tasks/task-010/test-code-review001.md",
+      "type": "test-code-review"
+    },
+    {
+      "label": "test-code-review002.md",
+      "path": "tasks/task-010/test-code-review002.md",
+      "type": "test-code-review"
+    }
+  ],
+  "updated_at": "2026-05-29"
+}

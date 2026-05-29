@@ -1,0 +1,142 @@
+{
+  "task_id": "task-005",
+  "title": "FORM002/FORM003 過検出修正",
+  "status": "完了",
+  "summary": "public 標準パッケージの Form XML で発生した FORM003 の過検出を修正するタスク。標準プロパティ判定を Field/name 起点から propertytype_id 起点へ寄せ、表示用 Field を検証対象外にした。",
+  "change_plan": {
+    "background": "task-004 で追加した Form Field propertytype_id チェックが、public の name=state かつ field_type=html の表示用 Field を標準プロパティ Field と誤判定した。Document.xml、ECN.xml、ECR.xml、PR.xml の 4 件で FORM003 が出ていた。",
+    "goal": "FORM002 は propertytype_id[@keyed_name] で標準プロパティ直接指定を判定する。FORM003 は Field action=\"edit\" の propertytype_id/Item/name を起点に標準プロパティ補完構造を検証する。",
+    "scope": [
+      "Form/*.xml の FORM002 判定",
+      "Form/*.xml の FORM003 判定",
+      "標準プロパティ補完構造の FORM004/FORM006 検証",
+      "state 名の HTML 表示 Field の回帰確認",
+      "public/PLM/Import/Form/*.xml の再検証"
+    ],
+    "out_of_scope": [
+      "public 配下 XML の変更",
+      "Form/*.xml 以外の XML 検証拡張",
+      "ItemType Property 定義やクロスファイル参照の実在確認",
+      "標準プロパティ候補一覧の大幅変更"
+    ]
+  },
+  "reviews": [
+    {
+      "kind": "public-check",
+      "file": "tasks/task-005/public-check001.md",
+      "judgement": "OK",
+      "findings": [
+        "python -m aml_harness public/PLM/Import/Form/*.xml で 32 件成功、0 件失敗",
+        "Document.xml、ECN.xml、ECR.xml、PR.xml の html state Field で FORM003 は出なかった",
+        "Part.xml、CAD.xml、Document.xml の標準プロパティ補完構造は検証を通過した"
+      ],
+      "result": "public Form XML の過検出は解消済みとして Harness 最終検証へ進む扱いになった。"
+    },
+    {
+      "kind": "public-check",
+      "file": "tasks/task-005/test-cases-review001.md",
+      "judgement": "OK",
+      "findings": [
+        "本文は public 標準パッケージ検証として記録されている",
+        "public/PLM/Import/Form/*.xml の 32 件がすべて成功した",
+        "前回過検出対象の html state Field で FORM003 は出ていない"
+      ],
+      "result": "コード、tests、samples、public 配下は変更せず、public 確認結果として扱われた。"
+    },
+    {
+      "kind": "test-code",
+      "file": "tasks/task-005/test-cases-review002.md",
+      "judgement": "OK",
+      "findings": [
+        "test-cases.md の No.1 から No.15 は tests/test_form_propertytype.py の test_no_001 から test_no_015 に対応している",
+        "異常系は期待 rule_id を具体的に検証している",
+        "No.8 は action 違反と select 欠落の 2 パターンを同じ観点の補強として検証している"
+      ],
+      "result": "不足テストや削除対象テストはないと判定され、アプリ実装へ進む扱いになった。"
+    },
+    {
+      "kind": "test-cases",
+      "file": "tasks/task-005/test-code-review001.md",
+      "judgement": "修正が必要",
+      "findings": [
+        "No.8 で select=\"id\" 欠落ケースの unittest が不足していると指摘された",
+        "異常系 assert が余分な診断を許していると指摘された",
+        "samples に No.1 から No.15 と対応しない旧サンプルや重複サンプルが残っていると指摘された"
+      ],
+      "result": "コード、tests、samples は変更せず、修正が必要なレビュー結果として記録された。"
+    },
+    {
+      "kind": "test-code",
+      "file": "tasks/task-005/test-code-review002.md",
+      "judgement": "OK",
+      "findings": [
+        "レビュー結果を test-cases-review002.md に出力済みと記録されている",
+        "python -m unittest は当時 4 件失敗していたが、期待動作を赤で表現できているため不足とは判断されなかった"
+      ],
+      "result": "テストコードレビュー上の不足なしとしてアプリ実装へ進む扱いになった。"
+    }
+  ],
+  "implementation": {
+    "tests": [
+      "tests/test_form_propertytype.py に FORM002/FORM003 再定義後の unittest を追加・更新",
+      "Field/name と propertytype_id[@keyed_name] が一致または不一致の直接指定正常系を確認",
+      "標準プロパティ edit 補完、非標準 edit 補完、空 Field/name の正常系を確認",
+      "FORM001、FORM002、FORM003、FORM004、FORM006 の異常系を期待 rule_id で確認",
+      "public XML 全体が診断なしになる回帰テストを追加"
+    ],
+    "samples": [
+      "samples/good/Form に direct keyed_name、標準プロパティ edit、非標準 edit、空 name、旧 FORM005 サンプルを追加",
+      "samples/bad/Form に直接 propertytype_id 不正、標準プロパティ直接指定、edit 対応 add 不足、action/select/source_id 違反を追加",
+      "samples/good/ItemType に Form 風 XML でも Form パス外なら対象外となるサンプルを追加"
+    ],
+    "app": [
+      "aml_harness/form.py の FORM002 を propertytype_id[@keyed_name] 起点の判定に変更",
+      "FORM003 を Field action=\"edit\" の propertytype_id/Item/name 起点の対応 add Field 確認に変更",
+      "propertytype_id を持たない表示用 Field を標準プロパティ補完検証の対象外に変更",
+      "標準プロパティ edit 補完に対する Property action=\"get\" select=\"id\" と source_id type=\"ItemType\" の検証を維持"
+    ],
+    "verification": [
+      "python -m unittest は 78 件成功",
+      "python -m aml_harness samples/good/base.xml は成功",
+      "python -m aml_harness public/PLM/Import/Form/*.xml は public-check001.md で 32 件成功、0 件失敗"
+    ]
+  },
+  "artifacts": [
+    {
+      "label": "change-plan.md",
+      "path": "tasks/task-005/change-plan.md",
+      "type": "change-plan"
+    },
+    {
+      "label": "test-cases.md",
+      "path": "tasks/task-005/test-cases.md",
+      "type": "test-cases"
+    },
+    {
+      "label": "public-check001.md",
+      "path": "tasks/task-005/public-check001.md",
+      "type": "public-check"
+    },
+    {
+      "label": "test-cases-review001.md",
+      "path": "tasks/task-005/test-cases-review001.md",
+      "type": "test-cases-review"
+    },
+    {
+      "label": "test-cases-review002.md",
+      "path": "tasks/task-005/test-cases-review002.md",
+      "type": "test-cases-review"
+    },
+    {
+      "label": "test-code-review001.md",
+      "path": "tasks/task-005/test-code-review001.md",
+      "type": "test-code-review"
+    },
+    {
+      "label": "test-code-review002.md",
+      "path": "tasks/task-005/test-code-review002.md",
+      "type": "test-code-review"
+    }
+  ],
+  "updated_at": "2026-05-29"
+}

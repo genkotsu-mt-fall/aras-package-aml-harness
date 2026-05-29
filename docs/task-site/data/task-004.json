@@ -1,0 +1,143 @@
+{
+  "task_id": "task-004",
+  "title": "Form XML の標準プロパティ propertytype_id チェック追加",
+  "status": "要確認",
+  "summary": "Form/*.xml の Field propertytype_id 構造を検査する計画とテスト、Form 固有実装が追加された。テストコードレビューは最終的に OK だが、成果物上は public 標準パッケージ確認で html の state 表示 Field に対する過検出が修正必要として残っている。",
+  "change_plan": {
+    "background": "public の Form XML では ItemType 固有プロパティと標準プロパティで propertytype_id の表現が異なる。標準プロパティは Field action=\"add\" ではなく、同じ Field id の Field action=\"edit\" で Property action=\"get\" select=\"id\" により補完される例が確認された。",
+    "goal": "Form/*.xml 専用に Field の propertytype_id 構造を検査する。ItemType 固有プロパティの 32 桁 GUID 直接指定と、標準プロパティ候補の edit 補完構造を扱う。",
+    "scope": [
+      "Form/*.xml の Form/Body/Field 構造",
+      "Field action=\"add\" の propertytype_id GUID 形式",
+      "標準プロパティ候補の Field action=\"edit\" 補完構造",
+      "html やボタンなど Property 非連携 Field の誤検出回避"
+    ],
+    "out_of_scope": [
+      "Form/*.xml 以外の XML",
+      "ItemType/*.xml の Property 定義妥当性",
+      "Field Event や Method や related_id の詳細検証",
+      "source_id GUID のクロスファイル実在確認",
+      "標準プロパティ一覧外 name の一律不正判定"
+    ]
+  },
+  "reviews": [
+    {
+      "kind": "public-check",
+      "file": "tasks/task-004/public-check001.md",
+      "judgement": "修正が必要",
+      "findings": [
+        "python -m aml_harness public/PLM/Import/Form/*.xml で 32 件中 28 件成功、4 件失敗",
+        "Document.xml、ECN.xml、ECR.xml、PR.xml の state Field で FORM003 が発生",
+        "失敗した state Field は field_type=html の表示用 Field で、Property 連携 Field ではない"
+      ],
+      "result": "標準プロパティ候補名だけで Field action=\"edit\" を必須化する過検出として、実装見直しが必要とされた。"
+    },
+    {
+      "kind": "public-check",
+      "file": "tasks/task-004/test-cases-review001.md",
+      "judgement": "修正が必要",
+      "findings": [
+        "本文は public 標準パッケージ検証として記録されている",
+        "public/PLM/Import/Form/*.xml で html の state 表示 Field に対する FORM003 過検出が確認された"
+      ],
+      "result": "失敗原因をもとにアプリ実装を見直す次アクションが記録された。"
+    },
+    {
+      "kind": "test-code",
+      "file": "tasks/task-004/test-cases-review002.md",
+      "judgement": "OK",
+      "findings": [
+        "test-cases.md の No.1 から No.14 は tests/test_form_propertytype.py の unittest に対応している",
+        "正常系は診断なし、異常系は期待 rule_id と診断メッセージ片を確認している",
+        "No.9 は action=\"get\" 違反と select=\"id\" 欠落を別 unittest で確認している",
+        "Form 固有テストは tests/test_form_propertytype.py に分離されている"
+      ],
+      "result": "修正必須の不足テストはないと判定された。"
+    },
+    {
+      "kind": "test-code",
+      "file": "tasks/task-004/test-code-review001.md",
+      "judgement": "修正が必要",
+      "findings": [
+        "異常系 assert が診断有無だけで具体性不足",
+        "No.9 の select=\"id\" 単独確認が不足",
+        "No.13 のパスベース除外確認が XML 内容と切り分けられていない"
+      ],
+      "result": "テストケースまたはテストコードの見直しが必要とされた。"
+    },
+    {
+      "kind": "test-code",
+      "file": "tasks/task-004/test-code-review002.md",
+      "judgement": "OK",
+      "findings": [
+        "test-cases.md の No.1 から No.14 は unittest と samples に対応している",
+        "python -m unittest tests.test_form_propertytype tests.test_base が確認された",
+        "確認時点では Form 実装未対応により No.4 から No.11 が失敗し、アプリ実装側で満たす期待結果と扱われた"
+      ],
+      "result": "テストと samples の対応は OK とされ、アプリ実装へ進む扱いになった。"
+    }
+  ],
+  "implementation": {
+    "tests": [
+      "tests/test_form_propertytype.py に Form propertytype_id 専用 unittest を追加",
+      "Field action=\"add\" の直接 propertytype_id GUID 形式を検証",
+      "標準プロパティ候補の直接 propertytype_id、edit 不足、action/select/source_id 違反を検証",
+      "Form/*.xml 以外では Form 固有チェックをスキップする回帰確認を追加",
+      "public XML 全体が診断なしになる確認テストを追加"
+    ],
+    "samples": [
+      "samples/good/Form に直接 GUID、標準プロパティ edit、非標準 edit、空 name、旧 FORM005 サンプルを追加",
+      "samples/bad/Form に直接 propertytype_id 不正、標準プロパティ直接指定、edit 不足、action/select/source_id 違反を追加",
+      "samples/good/ItemType に Form 風 XML でも Form パス外なら対象外となるサンプルを追加"
+    ],
+    "app": [
+      "aml_harness/form.py を追加し、STANDARD_PROPERTIES と check_form_propertytype を実装",
+      "Form パスの XML に限定して Form 固有チェックを aml_harness/base.py から呼び出す",
+      "FORM001、FORM002、FORM003、FORM004、FORM006 の診断を実装",
+      "Python 標準ライブラリの pathlib と xml.etree.ElementTree を使って実装"
+    ],
+    "verification": [
+      "python -m unittest tests.test_form_propertytype tests.test_base",
+      "python -m aml_harness public/PLM/Import/Form/*.xml",
+      "public-check001.md では public Form XML 32 件中 4 件の過検出が記録された"
+    ]
+  },
+  "artifacts": [
+    {
+      "label": "change-plan.md",
+      "path": "tasks/task-004/change-plan.md",
+      "type": "change-plan"
+    },
+    {
+      "label": "test-cases.md",
+      "path": "tasks/task-004/test-cases.md",
+      "type": "test-cases"
+    },
+    {
+      "label": "public-check001.md",
+      "path": "tasks/task-004/public-check001.md",
+      "type": "public-check"
+    },
+    {
+      "label": "test-cases-review001.md",
+      "path": "tasks/task-004/test-cases-review001.md",
+      "type": "test-cases-review"
+    },
+    {
+      "label": "test-cases-review002.md",
+      "path": "tasks/task-004/test-cases-review002.md",
+      "type": "test-cases-review"
+    },
+    {
+      "label": "test-code-review001.md",
+      "path": "tasks/task-004/test-code-review001.md",
+      "type": "test-code-review"
+    },
+    {
+      "label": "test-code-review002.md",
+      "path": "tasks/task-004/test-code-review002.md",
+      "type": "test-code-review"
+    }
+  ],
+  "updated_at": "2026-05-29"
+}

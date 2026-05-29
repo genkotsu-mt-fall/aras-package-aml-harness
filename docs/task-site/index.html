@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AML Harness Task History</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">aras-package-aml-harness</p>
+        <h1>Task History</h1>
+      </div>
+      <label class="search">
+        <span>Search</span>
+        <input id="searchInput" type="search" placeholder="task, review, implementation">
+      </label>
+    </header>
+
+    <main class="layout">
+      <aside class="sidebar" aria-label="Task list">
+        <div class="sidebar-head">
+          <h2>Tasks</h2>
+          <span id="taskCount">0</span>
+        </div>
+        <nav id="taskList" class="task-list"></nav>
+      </aside>
+
+      <section id="detail" class="detail" aria-live="polite">
+        <div class="empty">
+          <h2>No task selected</h2>
+          <p>Generate task summaries, then select a task from the list.</p>
+        </div>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>

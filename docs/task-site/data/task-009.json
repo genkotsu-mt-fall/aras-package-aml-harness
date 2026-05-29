@@ -1,0 +1,157 @@
+{
+  "task_id": "task-009",
+  "title": "imports.mf の package 位置関係チェック追加",
+  "status": "完了",
+  "summary": "imports.mf を AML XML とは別ルートで扱い、<imports> 直下の package 構造と package path の存在を検証する方針が整理された。実装では imports.mf 専用チェック、対応する samples、unittest、public manifest 確認が追加された。",
+  "change_plan": {
+    "background": "imports.mf は <imports> をルートにし、その直下に <package> を置く入口ファイルとして扱う必要があった。public には単数版と複数版の manifest 実例があり、path=\".\\\" や明示 path の標準パターンが確認された。",
+    "goal": "imports.mf 入力時にルート、直下 package、name、path、dependson name、明示 path の存在を最小限チェックする。カスタム package の命名や PLM 依存は Error にせず、確認事項として扱う。",
+    "scope": [
+      "imports.mf ファイル名の入力",
+      "<imports> ルートと直下 <package> の構造チェック",
+      "package の name 属性と path 属性のチェック",
+      "path=\".\\\" 以外の package path 存在確認",
+      "package 直下 dependson の name 属性チェック",
+      "既存 AML XML チェックの回帰確認"
+    ],
+    "out_of_scope": [
+      "Aras import の完全な依存解決",
+      "dependson の参照先 package 実在確認",
+      "標準 package の内部フォルダ階層の完全検証",
+      "package 名の命名規約を Error として強制すること",
+      "path 内 XML の再帰検証",
+      "AML 内部参照整合性の検証",
+      ".env の読み取りや変更"
+    ]
+  },
+  "reviews": [
+    {
+      "kind": "test-cases",
+      "file": "tasks/task-009/test-cases-review001.md",
+      "judgement": "OK",
+      "findings": [
+        "public/imports_単数版.mf と public/imports_複数版.mf を imports.mf 名で検証し、2 件とも成功した",
+        "単数版の package path=\"PLM\\Import\" は存在確認に成功した",
+        "複数版の 3 package は同じ <imports> 直下に並び、path=\".\\\" は存在確認対象外として許容された",
+        "dependson はいずれも name 属性を持ち、IMPORTS007 の過検出はなかった"
+      ],
+      "result": "標準 manifest 実例との不整合はないとされ、Harness 最終検証へ進む扱いになった。"
+    },
+    {
+      "kind": "test-cases",
+      "file": "tasks/task-009/test-cases-review002.md",
+      "judgement": "OK",
+      "findings": [
+        "test-cases.md の No.1 から No.21 が tests/test_imports_manifest.py の test_no_001 から test_no_021 に対応していた",
+        "正常系、異常系、境界値、回帰確認が sample XML 経由で assert されていた",
+        "期待 rule_id または成功期待が具体化されていた",
+        "No.15 と No.16 は同一形の sample だが、確認事項 IMPORTS102 と IMPORTS103 の別観点として分離が妥当とされた"
+      ],
+      "result": "テストコードレビューは OK とされ、アプリ実装へ進む扱いになった。"
+    },
+    {
+      "kind": "test-code",
+      "file": "tasks/task-009/test-code-review001.md",
+      "judgement": "修正が必要",
+      "findings": [
+        "test_no_021_only_non_package_child_reports_imports_structure_error の assert が IMPORTS002 または IMPORTS003 の含有だけを確認していた",
+        "AML001 など無関係な診断が混在しても成功し得る点が指摘された",
+        "許容する診断列を IMPORTS002、IMPORTS003、または両方に限定する必要があるとされた",
+        "No.15 と No.16 は統合可能だが、別観点として残す意図は理解できるとされた"
+      ],
+      "result": "No.21 の unittest 期待診断を限定する修正が必要とされた。"
+    },
+    {
+      "kind": "test-code",
+      "file": "tasks/task-009/test-code-review002.md",
+      "judgement": "OK",
+      "findings": [
+        "コード、tests、samples は変更していないと記録された"
+      ],
+      "result": "追加修正なしで OK とされた。"
+    },
+    {
+      "kind": "public-check",
+      "file": "tasks/task-009/public-check001.md",
+      "judgement": "OK",
+      "findings": [
+        "public/imports_単数版.mf と public/imports_複数版.mf を imports.mf 名で検証した",
+        "2 件とも成功した",
+        "標準 manifest 実例に対する過検出はなかった"
+      ],
+      "result": "public 標準パッケージ確認は OK とされた。"
+    }
+  ],
+  "implementation": {
+    "tests": [
+      "tests/test_imports_manifest.py に imports.mf 専用の No.1 から No.21 の unittest を追加",
+      "単数 package の明示 path、複数標準 package の path=\".\\\"、単数 package の path=\".\\\" を正常系として確認",
+      "ルート不正、package 不足、非 package 子要素、name/path 不足、path 不存在、dependson name 不足、XML parse エラーを確認",
+      "dependson なし、直下でない dependson、短いカスタム名、カスタム path=\".\\\"、PLM 依存なしを Error にしない境界値として確認",
+      "通常 AML XML の複数トップレベル Item と imports.mf の <AML> ルートを回帰確認",
+      "imports.mf の path 配下 XML は再帰検証しないことを確認",
+      "No.21 は IMPORTS002、IMPORTS003、または両方のみを許容する診断列 assert に修正"
+    ],
+    "samples": [
+      "samples/good/Imports に単数明示 path、複数標準 dot path、単数 dot path、標準明示 path の imports.mf を追加",
+      "samples/good/Imports に dependson なし、nested dependson、短いカスタム名、カスタム dot path、PLM 依存なしの imports.mf を追加",
+      "samples/good/Imports に path 配下 XML を再帰検証しない確認用 imports.mf と不完全 XML を追加",
+      "samples/bad/Imports に invalid root、package なし、非 package 子要素、name/path 不足、path 不存在、dependson name 不足の imports.mf を追加",
+      "samples/bad/Imports に invalid XML、imports.mf の AML root、非 package 子要素のみの imports.mf を追加"
+    ],
+    "app": [
+      "aml_harness/base.py でファイル名が imports.mf の場合に imports_manifest.check_imports_manifest へ分岐",
+      "aml_harness/imports_manifest.py を追加し IMPORTS001 から IMPORTS007 を実装",
+      "IMPORTS001 は root tag が imports でない場合に返す",
+      "IMPORTS002 と IMPORTS003 は imports 直下 package の有無と非 package 子要素を検出する",
+      "IMPORTS004 と IMPORTS005 は package の name/path 属性不足を検出する",
+      "IMPORTS006 は path=\".\\\"、\"./\"、\".\" 以外を imports.mf からの相対 path として存在確認する",
+      "IMPORTS007 は package 直下の dependson に name 属性がない場合を検出する"
+    ],
+    "verification": [
+      "test-cases-review001.md で public manifest 2 件の成功と標準 manifest 実例との不整合なしが記録された",
+      "test-cases-review002.md で No.1 から No.21 の unittest と sample 対応が確認された",
+      "test-code-review001.md で No.21 の期待診断限定が必要と指摘された",
+      "test-code-review002.md で追加修正なしの OK が記録された",
+      "public-check001.md で public manifest 2 件の成功と過検出なしが記録された"
+    ]
+  },
+  "artifacts": [
+    {
+      "label": "change-plan.md",
+      "path": "tasks/task-009/change-plan.md",
+      "type": "change-plan"
+    },
+    {
+      "label": "test-cases.md",
+      "path": "tasks/task-009/test-cases.md",
+      "type": "test-cases"
+    },
+    {
+      "label": "test-cases-review001.md",
+      "path": "tasks/task-009/test-cases-review001.md",
+      "type": "test-cases-review"
+    },
+    {
+      "label": "test-cases-review002.md",
+      "path": "tasks/task-009/test-cases-review002.md",
+      "type": "test-cases-review"
+    },
+    {
+      "label": "test-code-review001.md",
+      "path": "tasks/task-009/test-code-review001.md",
+      "type": "test-code-review"
+    },
+    {
+      "label": "test-code-review002.md",
+      "path": "tasks/task-009/test-code-review002.md",
+      "type": "test-code-review"
+    },
+    {
+      "label": "public-check001.md",
+      "path": "tasks/task-009/public-check001.md",
+      "type": "public-check"
+    }
+  ],
+  "updated_at": "2026-05-29"
+}
