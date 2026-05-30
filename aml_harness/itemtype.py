@@ -52,7 +52,24 @@ def check_itemtype_property_placement(path: Path, root: ET.Element) -> list[Diag
                     )
                 )
 
+            if (
+                not _is_public_package_path(path)
+                and _child_text(prop, "data_type") == "sequence"
+                and _child_text(prop, "is_required") == "1"
+            ):
+                diagnostics.append(
+                    Diagnostic(
+                        file_path=str(path),
+                        rule_id="ITYPE_SEQUENCE001",
+                        message="Sequence property must not be required",
+                    )
+                )
+
     return diagnostics
+
+
+def _is_public_package_path(path: Path) -> bool:
+    return "public" in path.parts
 
 
 def _child_text(element: ET.Element, name: str) -> str:

@@ -1,0 +1,20 @@
+<AML>
+  <Item type="Sequence" id="AAF71D8E658E4EFBA36B81941A3851C7" action="add">
+    <name>Sample Sequence</name>
+    <prefix>SP-</prefix>
+    <initial_value>1</initial_value>
+    <pad_to>5</pad_to>
+  </Item>
+  <Item type="ItemType" id="2826F2403689438295EDBF60BEAE7C74" action="edit">
+    <name>Sample Part</name>
+    <Relationships>
+      <Item type="Property" id="88B55ACC92D646D581DDA4565855635B" action="add">
+        <data_source keyed_name="Sample Sequence">AAF71D8E658E4EFBA36B81941A3851C7</data_source>
+        <data_type>sequence</data_type>
+        <is_required>1</is_required>
+        <source_id keyed_name="Sample Part" type="ItemType" name="Sample Part">2826F2403689438295EDBF60BEAE7C74</source_id>
+        <name>item_number</name>
+      </Item>
+    </Relationships>
+  </Item>
+</AML>

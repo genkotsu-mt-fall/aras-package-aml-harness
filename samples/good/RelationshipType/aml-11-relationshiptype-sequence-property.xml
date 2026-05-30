@@ -1,0 +1,19 @@
+<AML>
+  <Item type="RelationshipType" id="F2E9E4511E06426C8736E4E31B0B4588" action="add">
+    <name>Sample Part Document</name>
+    <relationship_id keyed_name="Sample Part Document" type="ItemType" name="Sample Part Document">
+      <Item type="ItemType" id="7D2B7B4B3B2A4D6E9C5A111111111111" action="add">
+        <name>Sample Part Document</name>
+        <Relationships>
+          <Item type="Property" id="88B55ACC92D646D581DDA4565855635B" action="add">
+            <data_source keyed_name="Sample Sequence">AAF71D8E658E4EFBA36B81941A3851C7</data_source>
+            <data_type>sequence</data_type>
+            <is_required>1</is_required>
+            <source_id keyed_name="Sample Part Document" type="ItemType" name="Sample Part Document">7D2B7B4B3B2A4D6E9C5A111111111111</source_id>
+            <name>relationship_number</name>
+          </Item>
+        </Relationships>
+      </Item>
+    </relationship_id>
+  </Item>
+</AML>

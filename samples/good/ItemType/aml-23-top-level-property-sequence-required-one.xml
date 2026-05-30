@@ -1,0 +1,9 @@
+<AML>
+  <Item type="Property" id="88B55ACC92D646D581DDA4565855635B" action="add">
+    <data_source keyed_name="Sample Sequence">AAF71D8E658E4EFBA36B81941A3851C7</data_source>
+    <data_type>sequence</data_type>
+    <is_required>1</is_required>
+    <source_id keyed_name="Sample Part" type="ItemType" name="Sample Part">2826F2403689438295EDBF60BEAE7C74</source_id>
+    <name>item_number</name>
+  </Item>
+</AML>
