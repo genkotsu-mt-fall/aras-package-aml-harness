@@ -1,0 +1,22 @@
+<AML>
+  <Item type="ItemType" id="11111111111111111111111111111111" action="add">
+    <name>First Type</name>
+    <Relationships>
+      <Item type="Property" id="22222222222222222222222222222222" action="add">
+        <name>item_number</name>
+        <data_type>sequence</data_type>
+        <is_required>0</is_required>
+      </Item>
+    </Relationships>
+  </Item>
+  <Item type="ItemType" id="33333333333333333333333333333333" action="edit">
+    <name>Second Type</name>
+    <Relationships>
+      <Item type="Property" id="44444444444444444444444444444444" action="add">
+        <name>item_number</name>
+        <data_type>sequence</data_type>
+        <is_required>1</is_required>
+      </Item>
+    </Relationships>
+  </Item>
+</AML>

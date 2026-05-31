@@ -1,0 +1,8 @@
+<AML>
+  <Item type="Sequence" id="AAF71D8E658E4EFBA36B81941A3851C7" action="add">
+    <name>Sample Sequence</name>
+    <prefix>SP-</prefix>
+    <initial_value>1</initial_value>
+    <pad_to>5</pad_to>
+  </Item>
+</AML>

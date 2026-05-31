@@ -1,0 +1,12 @@
+<AML>
+  <Item type="RelationshipType" id="F2E9E4511E06426C8736E4E31B0B4588" action="add">
+    <name>Custom Relationship</name>
+    <Relationships>
+      <Item type="Property" id="88B55ACC92D646D581DDA4565855635B" action="add">
+        <name>item_number</name>
+        <data_type>sequence</data_type>
+        <is_required>1</is_required>
+      </Item>
+    </Relationships>
+  </Item>
+</AML>

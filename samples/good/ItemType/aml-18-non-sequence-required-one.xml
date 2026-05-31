@@ -1,0 +1,13 @@
+<AML>
+  <Item type="ItemType" id="2826F2403689438295EDBF60BEAE7C74" action="add">
+    <name>Sample Part</name>
+    <Relationships>
+      <Item type="Property" id="6DE8A91F52DB4D42A4E5359A2D0B60F1" action="add">
+        <data_type>string</data_type>
+        <is_required>1</is_required>
+        <source_id keyed_name="Sample Part" type="ItemType" name="Sample Part">2826F2403689438295EDBF60BEAE7C74</source_id>
+        <name>title</name>
+      </Item>
+    </Relationships>
+  </Item>
+</AML>

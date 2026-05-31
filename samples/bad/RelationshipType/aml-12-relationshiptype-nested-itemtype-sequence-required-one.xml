@@ -1,0 +1,17 @@
+<AML>
+  <Item type="RelationshipType" id="55555555555555555555555555555555" action="add">
+    <name>Parent Child</name>
+    <relationship_id>
+      <Item type="ItemType" id="66666666666666666666666666666666" action="add">
+        <name>Parent Child</name>
+        <Relationships>
+          <Item type="Property" id="77777777777777777777777777777777" action="add">
+            <name>item_number</name>
+            <data_type>sequence</data_type>
+            <is_required>1</is_required>
+          </Item>
+        </Relationships>
+      </Item>
+    </relationship_id>
+  </Item>
+</AML>

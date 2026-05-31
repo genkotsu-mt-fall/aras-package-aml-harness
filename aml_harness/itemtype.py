@@ -22,12 +22,12 @@ STANDARD_PROPERTY_EDIT_NAMES = {
 
 
 def check_itemtype_property_placement(path: Path, root: ET.Element) -> list[Diagnostic]:
-    if path.parent.name != "ItemType" or path.suffix.lower() != ".xml":
-        return []
-
     diagnostics: list[Diagnostic] = []
+    check_standard_property_placement = (
+        path.parent.name == "ItemType" and path.suffix.lower() == ".xml"
+    )
 
-    for itemtype in root.findall("Item"):
+    for itemtype in root.iter("Item"):
         if itemtype.attrib.get("type") != "ItemType":
             continue
         if itemtype.attrib.get("action") not in {"add", "edit"}:
@@ -40,7 +40,10 @@ def check_itemtype_property_placement(path: Path, root: ET.Element) -> list[Diag
                 continue
 
             property_name = _child_text(prop, "name")
-            if property_name in STANDARD_PROPERTY_EDIT_NAMES:
+            if (
+                check_standard_property_placement
+                and property_name in STANDARD_PROPERTY_EDIT_NAMES
+            ):
                 diagnostics.append(
                     Diagnostic(
                         file_path=str(path),
@@ -49,6 +52,18 @@ def check_itemtype_property_placement(path: Path, root: ET.Element) -> list[Diag
                             f"Standard property {property_name} must use "
                             'Property action="edit"'
                         ),
+                    )
+                )
+
+            if (
+                _child_text(prop, "data_type") == "sequence"
+                and _child_text(prop, "is_required") == "1"
+            ):
+                diagnostics.append(
+                    Diagnostic(
+                        file_path=str(path),
+                        rule_id="ITYPE_SEQUENCE001",
+                        message="Sequence property must not be required",
                     )
                 )
 
