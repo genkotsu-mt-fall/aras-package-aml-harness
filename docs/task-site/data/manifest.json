@@ -7,6 +7,9 @@
     {"id":"task-007","file":"data/task-007.json"},
     {"id":"task-008","file":"data/task-008.json"},
     {"id":"task-009","file":"data/task-009.json"},
-    {"id":"task-010","file":"data/task-010.json"}
+    {"id":"task-010","file":"data/task-010.json"},
+    {"id":"task-011","file":"data/task-011.json"},
+    {"id":"task-012","file":"data/task-012.json"},
+    {"id":"task-013","file":"data/task-013.json"}
   ]
 }
