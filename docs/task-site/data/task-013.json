@@ -1,0 +1,146 @@
+{
+  "task_id": "task-013",
+  "title": "Action XML の List 値チェック",
+  "status": "完了",
+  "summary": "Action XML の location、target、type について、Action ItemType の List 定義に基づく必須チェックと許可値チェックを追加した。テストケース、テストコード、public 標準 Action XML 37 件の確認を経て、過検出なしで完了している。",
+  "change_plan": {
+    "background": "public の Action ItemType では location、target、type が data_type=list かつ is_required=1 として定義されている。対応する List XML から、location は client/server、target は main/window/one window/none、type は generic/item/itemtype/url が許可値と確認された。",
+    "goal": "Action ディレクトリ配下の XML に含まれる Item type=\"Action\" について、location、target、type の不存在・空値・許可値外を検出する。既存 public Action XML 37 件に対して追加エラーを出さないことも確認する。",
+    "scope": [
+      "AML XML ファイル",
+      "親ディレクトリ名が Action の .xml ファイル",
+      "Item type=\"Action\" の Action 定義",
+      "Action 定義直下の location、target、type 要素"
+    ],
+    "out_of_scope": [
+      "ItemType/Action.xml 自体の Property 定義検証",
+      "List/*.xml 自体の妥当性検証",
+      "List 参照の汎用的な参照整合性検証",
+      "method、body、label、item_query、can_execute など List 型ではないプロパティ",
+      "location と method など値同士の意味的な整合性検証"
+    ]
+  },
+  "reviews": [
+    {
+      "kind": "public-check",
+      "file": "tasks/task-013/public-check001.md",
+      "judgement": "OK",
+      "findings": [
+        "python -m aml_harness 'public/**/Action/*.xml' を実行",
+        "public Action XML 37 件を確認",
+        "成功 37 件、失敗 0 件",
+        "Action.location、Action.target、Action.type の追加チェックによる過検出はなかった"
+      ],
+      "result": "Harness 最終検証へ進む扱いになった。"
+    },
+    {
+      "kind": "test-cases",
+      "file": "tasks/task-013/test-cases-review001.md",
+      "judgement": "OK",
+      "findings": [
+        "ファイル内容は public 標準パッケージ検証結果として記録されている",
+        "public Action XML 37 件を確認",
+        "失敗 0 件で標準 XML への過検出候補はなかった"
+      ],
+      "result": "public 確認は OK として扱われた。"
+    },
+    {
+      "kind": "test-cases",
+      "file": "tasks/task-013/test-cases-review002.md",
+      "judgement": "修正が必要",
+      "findings": [
+        "多くの AML パターンで Item action=\"add\" に id がなく AML006 が混入する指摘があった",
+        "No.20 の非 AML ルートは全体成功ではなく AML001 を期待すべきと指摘された",
+        "List 値そのものは public の Action ItemType/List XML と整合していると確認された"
+      ],
+      "result": "直接子 Item に id を付け、No.20 の期待結果を AML001 のみへ修正する方針になった。"
+    },
+    {
+      "kind": "test-cases",
+      "file": "tasks/task-013/test-cases-review003.md",
+      "judgement": "OK",
+      "findings": [
+        "修正必須の過不足や不整合は見つからなかった",
+        "許可値、必須値、trim、大文字小文字差異の観点が change-plan と対応していた",
+        "対象パス、非 Action Item、method 参照、非 AML ルート、複数 Action Item の回帰確認が分離されていた"
+      ],
+      "result": "テストコード実装へ進む扱いになった。"
+    },
+    {
+      "kind": "test-code",
+      "file": "tasks/task-013/test-code-review001.md",
+      "judgement": "OK",
+      "findings": [
+        "test-cases.md の No.1 から No.21 が tests/test_action_list_values.py の test_no_001 から test_no_021 に対応していた",
+        "成功ケース、異常ケース、対象外パス、非 Action Item、非 AML root、複数 Action Item の assert が確認された",
+        "レビュー時点の unittest discover は Action List 診断が未実装だったため 12 件失敗していた"
+      ],
+      "result": "テストケースと unittest/samples の対応は OK とされ、アプリ実装へ進む扱いになった。"
+    }
+  ],
+  "implementation": {
+    "tests": [
+      "location=client/server、target=main/window/one window/none、type=generic/item/itemtype/url の成功を確認",
+      "location、target、type の不存在、空値、許可値外で ACTION_LIST001/002/003 を確認",
+      "複数不正値で 3 つの Action List ルールがそれぞれ出ることを確認",
+      "前後空白は trim 後に許可値と照合し、大文字小文字差異は不正として確認",
+      "Action ディレクトリ以外、非 Action Item、method 参照内 Method Item、非 AML root、複数 Action Item の回帰確認を追加"
+    ],
+    "samples": [
+      "samples/good/Action に基本許可値、未出現許可値、one window、server none itemtype、trim、非 Action Item、method 参照の正常例を追加",
+      "samples/good/Method に Action 値を含むが Action パス外として無視される正常例を追加",
+      "samples/bad/Action に location、target、type の欠落・空・許可値外・大文字小文字差異・複数不正値の異常例を追加",
+      "samples/bad/Action に非 AML root と複数 Action Item の異常例を追加"
+    ],
+    "app": [
+      "aml_harness/action.py を追加し、Action List プロパティ定義と check_action_list_values を実装",
+      "path.parent.name == \"Action\" かつ .xml の場合に Item type=\"Action\" を root.iter(\"Item\") で走査",
+      "Action 直下の location、target、type を trim して許可値と比較し、不存在や空値もエラーにした",
+      "aml_harness/base.py から root.tag == \"AML\" の Action XML に対して Action 固有チェックを呼び出すようにした"
+    ],
+    "verification": [
+      "python -m unittest discover -s tests",
+      "117 tests OK",
+      "python -m aml_harness 'public/**/Action/*.xml'",
+      "public Action XML 37 件で失敗 0 件を確認"
+    ]
+  },
+  "artifacts": [
+    {
+      "label": "change-plan.md",
+      "path": "tasks/task-013/change-plan.md",
+      "type": "change-plan"
+    },
+    {
+      "label": "test-cases.md",
+      "path": "tasks/task-013/test-cases.md",
+      "type": "test-cases"
+    },
+    {
+      "label": "test-cases-review001.md",
+      "path": "tasks/task-013/test-cases-review001.md",
+      "type": "test-cases-review"
+    },
+    {
+      "label": "test-cases-review002.md",
+      "path": "tasks/task-013/test-cases-review002.md",
+      "type": "test-cases-review"
+    },
+    {
+      "label": "test-cases-review003.md",
+      "path": "tasks/task-013/test-cases-review003.md",
+      "type": "test-cases-review"
+    },
+    {
+      "label": "test-code-review001.md",
+      "path": "tasks/task-013/test-code-review001.md",
+      "type": "test-code-review"
+    },
+    {
+      "label": "public-check001.md",
+      "path": "tasks/task-013/public-check001.md",
+      "type": "public-check"
+    }
+  ],
+  "updated_at": "2026-05-31"
+}

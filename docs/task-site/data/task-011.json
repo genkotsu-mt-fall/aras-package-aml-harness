@@ -1,0 +1,145 @@
+{
+  "task_id": "task-011",
+  "title": "ItemType の Sequence プロパティ必須チェック",
+  "status": "完了",
+  "summary": "ItemType の Relationships 配下にある Property について、data_type が sequence かつ is_required が 1 の場合に ITYPE_SEQUENCE001 として検出する方針チェックを追加した。Aras 標準 XML には同条件の例があるため、標準仕様違反ではなく対象プロジェクトの方針違反として扱う整理になっている。",
+  "change_plan": {
+    "background": "Sequence は採番値を自動生成する用途で使われるため、対象プロジェクトでは ItemType のプロパティ定義で必須にしない方針とした。public 標準 XML には is_required=1 の Sequence 例もあるため、Aras 標準仕様違反とは断定しない。",
+    "goal": "AML XML 上で明確に判定できる ItemType 配下の Sequence Property だけを対象に、is_required=1 を最小限検出する。親 ItemType の action は判定条件にせず、参照整合性や Sequence 定義自体は検証しない。",
+    "scope": [
+      "AML XML ファイル",
+      "Item type=\"ItemType\" の Relationships 配下にある Item type=\"Property\"",
+      "data_type が sequence の Property",
+      "is_required が明示的に 1 の Property"
+    ],
+    "out_of_scope": [
+      "Item type=\"Sequence\" そのものの定義",
+      "ItemType 配下ではない Property",
+      "RelationshipType 定義配下の Property",
+      "source_id や data_source などの参照整合性検証"
+    ]
+  },
+  "reviews": [
+    {
+      "kind": "test-cases",
+      "file": "tasks/task-011/test-cases-review001.md",
+      "judgement": "OK",
+      "findings": [
+        "指摘事項なし",
+        "削除または統合した方がよい観点なし",
+        "Property action=\"edit\" は未確定事項として扱う"
+      ],
+      "result": "テストコード実装へ進む扱いになった。"
+    },
+    {
+      "kind": "test-cases",
+      "file": "tasks/task-011/test-cases-review002.md",
+      "judgement": "修正が必要",
+      "findings": [
+        "No.15 が確認事項のまま一覧に含まれ、期待結果が一意に決まっていない",
+        "主要ケースは public 標準 XML 構造と概ね整合している",
+        "Property action=\"edit\" の扱いは実装前に方針決定が必要"
+      ],
+      "result": "No.15 をテストケース一覧から外すか確認事項へ移す修正が求められた。"
+    },
+    {
+      "kind": "test-cases",
+      "file": "tasks/task-011/test-cases-review003.md",
+      "judgement": "OK",
+      "findings": [
+        "指摘事項なし",
+        "RelationshipType の relationship_id 配下構造や複数トップレベル Item の観点は妥当",
+        "Property action=\"edit\" は確認事項として明示されており不足とは扱わない"
+      ],
+      "result": "テストコード実装へ進む扱いになった。"
+    },
+    {
+      "kind": "test-code",
+      "file": "tasks/task-011/test-code-review001.md",
+      "judgement": "OK",
+      "findings": [
+        "指摘事項なし",
+        "不足しているテストなし",
+        "unittest と samples の対応不備はない"
+      ],
+      "result": "アプリ実装へ進む扱いになった。"
+    },
+    {
+      "kind": "public-check",
+      "file": "tasks/task-011/public-check001.md",
+      "judgement": "OK",
+      "findings": [
+        "public 配下の ItemType XML 197 件を確認",
+        "成功件数 197 件、失敗件数 0 件",
+        "標準 XML との不整合なし"
+      ],
+      "result": "Harness 最終検証へ進む扱いになった。"
+    }
+  ],
+  "implementation": {
+    "tests": [
+      "sequence Property で is_required=0 は成功する",
+      "sequence Property で is_required=1 は ITYPE_SEQUENCE001 を出す",
+      "sequence 以外の Property で is_required=1 はこのルールでは成功する",
+      "is_required 不在または空要素は成功する",
+      "data_source 不在や未解決参照はこのルールでは成功する",
+      "親 ItemType action=\"edit\" でも is_required=1 は検出する",
+      "複数 Property や後続トップレベル ItemType の違反を検出する",
+      "public 既知例とその他 public 例の扱いを unittest で確認する"
+    ],
+    "samples": [
+      "samples/good/ItemType に sequence required 0、不在、空、data_source 不在、Sequence 定義、未解決参照の正常例を追加",
+      "samples/bad/ItemType に sequence required 1、複数 Property、親 ItemType edit、後続 ItemType の異常例を追加",
+      "samples/good/RelationshipType に非対象の sequence Property 例を追加",
+      "samples/bad/RelationshipType に relationship_id 配下の nested ItemType sequence required 1 例を追加"
+    ],
+    "app": [
+      "aml_harness/itemtype.py で ItemType の Relationships 配下の Property を走査",
+      "data_type が sequence かつ is_required が 1 の場合に ITYPE_SEQUENCE001 を返す",
+      "診断メッセージを Sequence property must not be required とした"
+    ],
+    "verification": [
+      "python -m unittest tests.test_itemtype_sequence_property",
+      "python -m aml_harness 'public/**/ItemType/*.xml'",
+      "public ItemType XML 197 件で失敗 0 件を確認"
+    ]
+  },
+  "artifacts": [
+    {
+      "label": "change-plan.md",
+      "path": "tasks/task-011/change-plan.md",
+      "type": "change-plan"
+    },
+    {
+      "label": "test-cases.md",
+      "path": "tasks/task-011/test-cases.md",
+      "type": "test-cases"
+    },
+    {
+      "label": "test-cases-review001.md",
+      "path": "tasks/task-011/test-cases-review001.md",
+      "type": "test-cases-review"
+    },
+    {
+      "label": "test-cases-review002.md",
+      "path": "tasks/task-011/test-cases-review002.md",
+      "type": "test-cases-review"
+    },
+    {
+      "label": "test-cases-review003.md",
+      "path": "tasks/task-011/test-cases-review003.md",
+      "type": "test-cases-review"
+    },
+    {
+      "label": "test-code-review001.md",
+      "path": "tasks/task-011/test-code-review001.md",
+      "type": "test-code-review"
+    },
+    {
+      "label": "public-check001.md",
+      "path": "tasks/task-011/public-check001.md",
+      "type": "public-check"
+    }
+  ],
+  "updated_at": "2026-05-31"
+}

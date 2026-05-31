@@ -1,0 +1,181 @@
+{
+  "task_id": "task-012",
+  "title": "ItemType Sequence 必須チェックの public 例外限定",
+  "status": "完了",
+  "summary": "ItemType 配下の sequence Property が is_required=1 の場合に ITYPE_SEQUENCE001 を出し、public パスという理由ではスキップしない方針を整理した。public 一括確認では mpo_MassPromotion.xml だけを既知例外として扱う形に限定した。",
+  "change_plan": {
+    "background": "却下された PR #19 では public パス判定で Sequence 必須チェックを除外していたが、public はこのリポジトリ内の標準パッケージ保管都合にすぎない。CLI 本体は任意 AML を検査するため、標準パッケージ例外は public 一括確認側へ閉じ込める必要があった。",
+    "goal": "ItemType の Relationships 配下にある Property で data_type=sequence かつ is_required=1 を ITYPE_SEQUENCE001 として検出する。public 一括確認では public/com/aras/innovator/masspromote/ItemType/mpo_MassPromotion.xml だけを既知例外として扱う。",
+    "scope": [
+      "AML XML ファイル",
+      "Item type=\"ItemType\" の Relationships 配下にある Item type=\"Property\"",
+      "data_type が sequence の Property",
+      "is_required が明示的に 1 の Property",
+      "public ItemType XML と RelationshipType XML の一括確認"
+    ],
+    "out_of_scope": [
+      "public パスによる CLI 本体側の標準パッケージ判定",
+      "source_id や data_source の参照整合性検証",
+      "is_required が存在しない、または空の Sequence Property",
+      "ItemType 配下ではない Property"
+    ]
+  },
+  "reviews": [
+    {
+      "kind": "public-check",
+      "file": "tasks/task-012/public-check001.md",
+      "judgement": "OK",
+      "findings": [
+        "public ItemType XML 197 件と RelationshipType XML 279 件を確認",
+        "成功件数 475 件、失敗件数 1 件",
+        "失敗は既知例外の mpo_MassPromotion.xml のみ",
+        "その他の過検出候補は確認されなかった"
+      ],
+      "result": "アプリ実装は変更せず、public 検証側で 1 ファイルのみ既知例外または期待エラーとして扱う整理になった。"
+    },
+    {
+      "kind": "public-check",
+      "file": "tasks/task-012/test-cases-review001.md",
+      "judgement": "OK",
+      "findings": [
+        "public ItemType XML 197 件と RelationshipType XML 279 件を確認",
+        "失敗 1 件は change-plan.md の既知例外 mpo_MassPromotion.xml のみ",
+        "RelationshipType XML 279 件では追加の ITYPE_SEQUENCE001 は発生しなかった"
+      ],
+      "result": "Harness 最終検証へ進む扱いになった。"
+    },
+    {
+      "kind": "test-code",
+      "file": "tasks/task-012/test-cases-review002.md",
+      "judgement": "修正が必要",
+      "findings": [
+        "No.11 の public 配下別ファイル確認が CLI 直接チェック層に重複していた",
+        "public 一括確認側の例外判定で mpo_MassPromotion.xml 以外が unexpected 扱いになる確認が不足していた",
+        "No.1 から No.9、No.12、No.13 は対応する unittest と rule id assert が確認された"
+      ],
+      "result": "No.11 を public 一括確認側の例外限定テストへ修正するよう求められた。"
+    },
+    {
+      "kind": "test-code",
+      "file": "tasks/task-012/test-cases-review003.md",
+      "judgement": "OK",
+      "findings": [
+        "指摘事項なし",
+        "不足しているテストなし",
+        "削除または統合した方がよいテストなし"
+      ],
+      "result": "アプリ実装へ進む扱いになった。"
+    },
+    {
+      "kind": "test-code",
+      "file": "tasks/task-012/test-code-review001.md",
+      "judgement": "修正が必要",
+      "findings": [
+        "No.10 の public 一括確認が実テスト側で既知例外を扱えていなかった",
+        "No.12 のサンプルが 2 件目以降の ItemType を直接確認できる構造になっていなかった"
+      ],
+      "result": "レビュー結果は test-cases-review001.md に出力されたと記録されている。"
+    },
+    {
+      "kind": "test-code",
+      "file": "tasks/task-012/test-code-review002.md",
+      "judgement": "修正が必要",
+      "findings": [
+        "No.11 の public 配下別ファイル確認が No.8 と同じ CLI 直接チェック層になっていた",
+        "mpo_MassPromotion.xml 以外の synthetic な public 相対パスが unexpected 扱いになる確認が不足していた"
+      ],
+      "result": "No.11 を public 一括確認側の例外フィルタを通るテストへ修正するよう求められた。"
+    },
+    {
+      "kind": "test-code",
+      "file": "tasks/task-012/test-code-review003.md",
+      "judgement": "OK",
+      "findings": [
+        "指摘事項なし",
+        "不足しているテストなし",
+        "削除または統合した方がよいテストなし"
+      ],
+      "result": "アプリ実装へ進む扱いになった。"
+    }
+  ],
+  "implementation": {
+    "tests": [
+      "sequence Property で is_required=0 は成功する",
+      "sequence Property で is_required=1 は ITYPE_SEQUENCE001 を出す",
+      "sequence 以外の Property が必須でもこのルールでは成功する",
+      "ItemType 配下ではない Property と RelationshipType 直下の Property は対象外にする",
+      "is_required 不在または空要素は成功する",
+      "public を含むパスの直接チェックでも ITYPE_SEQUENCE001 を出す",
+      "mpo_MassPromotion.xml は CLI 直接チェックでは ITYPE_SEQUENCE001 を出す",
+      "public 一括確認では mpo_MassPromotion.xml のみ既知例外として扱う",
+      "public 配下の別ファイルの同条件違反は unexpected diagnostics として扱う",
+      "後続トップレベル ItemType と RelationshipType XML 内の nested ItemType を検出する"
+    ],
+    "samples": [
+      "samples/good/ItemType に sequence required 0、非 sequence required 1、parent edit、is_required 不在、空、data_source 不在、トップレベル Property、Sequence 定義、未解決参照の正常例を追加",
+      "samples/bad/ItemType に sequence required 1、複数 Property、parent edit、後続トップレベル ItemType の異常例を追加",
+      "samples/good/RelationshipType に RelationshipType 直下の sequence required 1 Property の正常例を追加",
+      "samples/bad/RelationshipType に relationship_id 配下の nested ItemType sequence required 1 例を追加"
+    ],
+    "app": [
+      "aml_harness/itemtype.py で root.iter(\"Item\") により AML 全体の ItemType を走査",
+      "ItemType の Relationships/Item のうち type=\"Property\" かつ action=\"add\" を対象にした",
+      "data_type が sequence かつ is_required が 1 の場合に ITYPE_SEQUENCE001 を返す",
+      "public パスによる除外判定は本体実装に入れていない"
+    ],
+    "verification": [
+      "python -m aml_harness 'public/**/ItemType/*.xml'",
+      "python -m aml_harness 'public/**/RelationshipType/*.xml'",
+      "public ItemType XML 197 件と RelationshipType XML 279 件を確認",
+      "public 確認で失敗は mpo_MassPromotion.xml の 1 件のみ"
+    ]
+  },
+  "artifacts": [
+    {
+      "label": "change-plan.md",
+      "path": "tasks/task-012/change-plan.md",
+      "type": "change-plan"
+    },
+    {
+      "label": "test-cases.md",
+      "path": "tasks/task-012/test-cases.md",
+      "type": "test-cases"
+    },
+    {
+      "label": "test-cases-review001.md",
+      "path": "tasks/task-012/test-cases-review001.md",
+      "type": "test-cases-review"
+    },
+    {
+      "label": "test-cases-review002.md",
+      "path": "tasks/task-012/test-cases-review002.md",
+      "type": "test-cases-review"
+    },
+    {
+      "label": "test-cases-review003.md",
+      "path": "tasks/task-012/test-cases-review003.md",
+      "type": "test-cases-review"
+    },
+    {
+      "label": "test-code-review001.md",
+      "path": "tasks/task-012/test-code-review001.md",
+      "type": "test-code-review"
+    },
+    {
+      "label": "test-code-review002.md",
+      "path": "tasks/task-012/test-code-review002.md",
+      "type": "test-code-review"
+    },
+    {
+      "label": "test-code-review003.md",
+      "path": "tasks/task-012/test-code-review003.md",
+      "type": "test-code-review"
+    },
+    {
+      "label": "public-check001.md",
+      "path": "tasks/task-012/public-check001.md",
+      "type": "public-check"
+    }
+  ],
+  "updated_at": "2026-05-31"
+}
