@@ -1,0 +1,8 @@
+<AML>
+  <Item type="Action" id="00000000000000000000000000000002" action="add">
+    <location>server</location>
+    <target>window</target>
+    <type>url</type>
+    <name>Valid Url Action</name>
+  </Item>
+</AML>

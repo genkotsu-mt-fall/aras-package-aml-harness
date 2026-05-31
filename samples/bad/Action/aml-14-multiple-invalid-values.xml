@@ -1,0 +1,8 @@
+<AML>
+  <Item type="Action" id="00000000000000000000000000000014" action="add">
+    <location>desktop</location>
+    <target>popup</target>
+    <type>script</type>
+    <name>Multiple Invalid Values Action</name>
+  </Item>
+</AML>

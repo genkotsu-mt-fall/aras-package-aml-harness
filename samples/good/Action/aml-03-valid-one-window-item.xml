@@ -1,0 +1,8 @@
+<AML>
+  <Item type="Action" id="00000000000000000000000000000003" action="add">
+    <location>client</location>
+    <target>one window</target>
+    <type>item</type>
+    <name>Valid Item Action</name>
+  </Item>
+</AML>

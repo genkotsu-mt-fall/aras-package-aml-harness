@@ -1,0 +1,6 @@
+<Item type="Action" id="00000000000000000000000000000020" action="add">
+  <location>desktop</location>
+  <target>popup</target>
+  <type>script</type>
+  <name>Ignored Non AML Root</name>
+</Item>

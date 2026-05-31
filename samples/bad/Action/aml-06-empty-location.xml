@@ -1,0 +1,8 @@
+<AML>
+  <Item type="Action" id="00000000000000000000000000000006" action="add">
+    <location />
+    <target>none</target>
+    <type>item</type>
+    <name>Empty Location Action</name>
+  </Item>
+</AML>

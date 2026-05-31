@@ -1,0 +1,8 @@
+<AML>
+  <Item type="Action" id="00000000000000000000000000000017" action="add">
+    <location>desktop</location>
+    <target>popup</target>
+    <type>script</type>
+    <name>Ignored Outside Action Directory</name>
+  </Item>
+</AML>

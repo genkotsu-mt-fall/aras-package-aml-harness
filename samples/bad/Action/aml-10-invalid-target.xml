@@ -1,0 +1,8 @@
+<AML>
+  <Item type="Action" id="00000000000000000000000000000010" action="add">
+    <location>client</location>
+    <target>dialog</target>
+    <type>item</type>
+    <name>Invalid Target Action</name>
+  </Item>
+</AML>

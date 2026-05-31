@@ -72,6 +72,11 @@ def check_file(path: Path) -> list[Diagnostic]:
 
         diagnostics.extend(check_form_propertytype(path, root))
 
+    if root.tag == "AML" and path.parent.name == "Action" and path.suffix.lower() == ".xml":
+        from aml_harness.action import check_action_list_values
+
+        diagnostics.extend(check_action_list_values(path, root))
+
     if root.tag == "AML" and path.suffix.lower() == ".xml":
         from aml_harness.itemtype import check_itemtype_property_placement
 

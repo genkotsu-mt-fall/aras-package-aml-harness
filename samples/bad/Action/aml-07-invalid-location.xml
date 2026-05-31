@@ -1,0 +1,8 @@
+<AML>
+  <Item type="Action" id="00000000000000000000000000000007" action="add">
+    <location>browser</location>
+    <target>none</target>
+    <type>item</type>
+    <name>Invalid Location Action</name>
+  </Item>
+</AML>
