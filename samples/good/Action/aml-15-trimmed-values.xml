@@ -1,0 +1,10 @@
+<AML>
+  <Item type="Action" id="00000000000000000000000000000015" action="add">
+    <location> client </location>
+    <target>
+      none
+    </target>
+    <type> item </type>
+    <name>Trimmed Values Action</name>
+  </Item>
+</AML>

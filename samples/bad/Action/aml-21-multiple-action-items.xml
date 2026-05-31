@@ -1,0 +1,14 @@
+<AML>
+  <Item type="Action" id="00000000000000000000000000000021" action="add">
+    <location>client</location>
+    <target>none</target>
+    <type>item</type>
+    <name>Valid First Action</name>
+  </Item>
+  <Item type="Action" id="00000000000000000000000000000022" action="add">
+    <location>server</location>
+    <target>popup</target>
+    <type>generic</type>
+    <name>Invalid Second Action</name>
+  </Item>
+</AML>

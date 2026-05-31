@@ -1,0 +1,7 @@
+<AML>
+  <Item type="Action" id="00000000000000000000000000000008" action="add">
+    <location>client</location>
+    <type>item</type>
+    <name>Missing Target Action</name>
+  </Item>
+</AML>

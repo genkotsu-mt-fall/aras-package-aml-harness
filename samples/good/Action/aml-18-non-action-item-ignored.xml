@@ -1,0 +1,8 @@
+<AML>
+  <Item type="Method" id="00000000000000000000000000000018" action="add">
+    <location>desktop</location>
+    <target>popup</target>
+    <type>script</type>
+    <name>Ignored Method Item</name>
+  </Item>
+</AML>

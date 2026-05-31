@@ -1,0 +1,14 @@
+<AML>
+  <Item type="Action" id="00000000000000000000000000000019" action="add">
+    <item_query />
+    <location>client</location>
+    <method keyed_name="Run Server Method" type="Method">
+      <Item type="Method" action="get" select="id">
+        <name>Run Server Method</name>
+      </Item>
+    </method>
+    <target>one window</target>
+    <type>item</type>
+    <name>Run Server Method</name>
+  </Item>
+</AML>

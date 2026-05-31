@@ -1,0 +1,4 @@
+interface:
+  display_name: "Create Task Plan"
+  short_description: "Create numbered task folders and change plans"
+  default_prompt: "Use $create-task-plan to create the next tasks/task-### folder and draft its change-plan.md."

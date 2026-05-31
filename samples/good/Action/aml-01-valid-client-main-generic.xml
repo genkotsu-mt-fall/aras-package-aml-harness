@@ -1,0 +1,8 @@
+<AML>
+  <Item type="Action" id="00000000000000000000000000000001" action="add">
+    <location>client</location>
+    <target>main</target>
+    <type>generic</type>
+    <name>Valid Generic Action</name>
+  </Item>
+</AML>

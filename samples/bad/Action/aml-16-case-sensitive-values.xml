@@ -1,0 +1,8 @@
+<AML>
+  <Item type="Action" id="00000000000000000000000000000016" action="add">
+    <location>Client</location>
+    <target>None</target>
+    <type>Item</type>
+    <name>Case Sensitive Action</name>
+  </Item>
+</AML>
