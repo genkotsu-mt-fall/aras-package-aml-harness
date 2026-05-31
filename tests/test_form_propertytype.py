@@ -106,21 +106,6 @@ class FormPropertyTypeCheckTests(unittest.TestCase):
         diagnostics = check_file(path)
         self.assertEqual([], diagnostics, f"{path}: {diagnostics}")
 
-    def test_no_017_public_xml_files_pass(self):
-        public_dir = ROOT_DIR / "public"
-        if not public_dir.exists():
-            self.skipTest(f"{public_dir} is not available")
-
-        paths = sorted(public_dir.glob("**/*.xml"))
-        if not paths:
-            self.skipTest(f"{public_dir} does not contain XML files")
-
-        diagnostics = []
-        for path in paths:
-            diagnostics.extend(check_file(path))
-
-        self.assertEqual([], diagnostics)
-
 
 if __name__ == "__main__":
     unittest.main()

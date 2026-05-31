@@ -72,7 +72,7 @@ def check_file(path: Path) -> list[Diagnostic]:
 
         diagnostics.extend(check_form_propertytype(path, root))
 
-    if root.tag == "AML" and path.parent.name == "ItemType" and path.suffix.lower() == ".xml":
+    if root.tag == "AML" and path.suffix.lower() == ".xml":
         from aml_harness.itemtype import check_itemtype_property_placement
 
         diagnostics.extend(check_itemtype_property_placement(path, root))
