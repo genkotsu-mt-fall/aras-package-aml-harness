@@ -26,6 +26,9 @@ def check_itemtype_property_placement(path: Path, root: ET.Element) -> list[Diag
     check_standard_property_placement = (
         path.parent.name == "ItemType" and path.suffix.lower() == ".xml"
     )
+    skip_required_sequence_check = (
+        path.parent.name == "ItemType" and path.name == "mpo_MassPromotion.xml"
+    )
 
     for itemtype in root.iter("Item"):
         if itemtype.attrib.get("type") != "ItemType":
@@ -56,7 +59,8 @@ def check_itemtype_property_placement(path: Path, root: ET.Element) -> list[Diag
                 )
 
             if (
-                _child_text(prop, "data_type") == "sequence"
+                not skip_required_sequence_check
+                and _child_text(prop, "data_type") == "sequence"
                 and _child_text(prop, "is_required") == "1"
             ):
                 diagnostics.append(
