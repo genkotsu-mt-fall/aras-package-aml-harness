@@ -2,6 +2,13 @@ from pathlib import Path
 import xml.etree.ElementTree as ET
 
 from aml_harness.base import Diagnostic
+from aml_harness.field import (
+    check_body,
+    check_field,
+    check_field_event,
+    check_form_event,
+)
+from aml_harness.package_common import diagnostic, has_non_empty_child
 
 
 STANDARD_PROPERTIES = {
@@ -118,6 +125,59 @@ def check_form_propertytype(path: Path, root: ET.Element) -> list[Diagnostic]:
                     message="Property source_id must have type=\"ItemType\"",
                 )
             )
+
+    return diagnostics
+
+
+def check_form_package(path: Path, root: ET.Element) -> list[Diagnostic]:
+    diagnostics: list[Diagnostic] = []
+
+    for form in root.findall("Item"):
+        if form.attrib.get("type") != "Form":
+            continue
+
+        if form.attrib.get("action") == "add":
+            for name in ("height", "width", "name"):
+                if not has_non_empty_child(form, name):
+                    diagnostics.append(diagnostic(path, "FORM_REQUIRED001", f"Form/Form.{name} is required"))
+
+        for relationship in form.findall("Relationships/Item"):
+            diagnostics.extend(check_form_relationship(path, relationship))
+
+    return diagnostics
+
+
+def check_form_relationship(path: Path, item: ET.Element) -> list[Diagnostic]:
+    diagnostics: list[Diagnostic] = []
+    item_type = item.attrib.get("type")
+
+    if item_type == "Body":
+        diagnostics.extend(check_body(path, item, "FORM_BODY_REQUIRED001", "FORM_BODY_LIST001"))
+        for field in item.findall("Relationships/Item"):
+            if field.attrib.get("type") == "Field":
+                diagnostics.extend(check_field(path, field, "FORM_FIELD_REQUIRED001", "FORM_FIELD_LIST001"))
+                for event in field.findall("Relationships/Item"):
+                    diagnostics.extend(
+                        check_field_event(
+                            path,
+                            event,
+                            "FORM_FIELD_EVENT_REQUIRED001",
+                            "FORM_FIELD_EVENT_LIST001",
+                        )
+                    )
+    elif item_type == "Field":
+        diagnostics.extend(check_field(path, item, "FORM_FIELD_REQUIRED001", "FORM_FIELD_LIST001"))
+        for event in item.findall("Relationships/Item"):
+            diagnostics.extend(
+                check_field_event(
+                    path,
+                    event,
+                    "FORM_FIELD_EVENT_REQUIRED001",
+                    "FORM_FIELD_EVENT_LIST001",
+                )
+            )
+    elif item_type == "Form Event":
+        diagnostics.extend(check_form_event(path, item, "FORM_FORM_EVENT_REQUIRED001", "FORM_FORM_EVENT_LIST001"))
 
     return diagnostics
 
