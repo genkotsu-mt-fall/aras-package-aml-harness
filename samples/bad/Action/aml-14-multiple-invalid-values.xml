@@ -1,6 +1,11 @@
 <AML>
   <Item type="Action" id="00000000000000000000000000000014" action="add">
     <location>desktop</location>
+    <method keyed_name="Multiple Invalid Values Method" type="Method">
+      <Item type="Method" action="get" select="id">
+        <name>Multiple Invalid Values Method</name>
+      </Item>
+    </method>
     <target>popup</target>
     <type>script</type>
     <name>Multiple Invalid Values Action</name>

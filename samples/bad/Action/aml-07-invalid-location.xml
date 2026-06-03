@@ -1,6 +1,11 @@
 <AML>
   <Item type="Action" id="00000000000000000000000000000007" action="add">
     <location>browser</location>
+    <method keyed_name="Invalid Location Method" type="Method">
+      <Item type="Method" action="get" select="id">
+        <name>Invalid Location Method</name>
+      </Item>
+    </method>
     <target>none</target>
     <type>item</type>
     <name>Invalid Location Action</name>

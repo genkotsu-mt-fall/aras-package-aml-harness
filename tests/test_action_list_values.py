@@ -42,16 +42,16 @@ class ActionListValueCheckTests(unittest.TestCase):
             "samples/good/Action/aml-04-valid-server-none-itemtype.xml"
         )
 
-    def test_no_005_missing_location_reports_action_list001(self):
+    def test_no_005_missing_location_reports_action_required001(self):
         self.assert_sample_reports_rules(
             "samples/bad/Action/aml-05-missing-location.xml",
-            ["ACTION_LIST001"],
+            ["ACTION_REQUIRED001"],
         )
 
-    def test_no_006_empty_location_reports_action_list001(self):
+    def test_no_006_empty_location_reports_action_required001(self):
         self.assert_sample_reports_rules(
             "samples/bad/Action/aml-06-empty-location.xml",
-            ["ACTION_LIST001"],
+            ["ACTION_REQUIRED001"],
         )
 
     def test_no_007_invalid_location_reports_action_list001(self):
@@ -60,16 +60,16 @@ class ActionListValueCheckTests(unittest.TestCase):
             ["ACTION_LIST001"],
         )
 
-    def test_no_008_missing_target_reports_action_list002(self):
+    def test_no_008_missing_target_reports_action_required001(self):
         self.assert_sample_reports_rules(
             "samples/bad/Action/aml-08-missing-target.xml",
-            ["ACTION_LIST002"],
+            ["ACTION_REQUIRED001"],
         )
 
-    def test_no_009_empty_target_reports_action_list002(self):
+    def test_no_009_empty_target_reports_action_required001(self):
         self.assert_sample_reports_rules(
             "samples/bad/Action/aml-09-empty-target.xml",
-            ["ACTION_LIST002"],
+            ["ACTION_REQUIRED001"],
         )
 
     def test_no_010_invalid_target_reports_action_list002(self):
@@ -78,16 +78,16 @@ class ActionListValueCheckTests(unittest.TestCase):
             ["ACTION_LIST002"],
         )
 
-    def test_no_011_missing_type_reports_action_list003(self):
+    def test_no_011_missing_type_reports_action_required001(self):
         self.assert_sample_reports_rules(
             "samples/bad/Action/aml-11-missing-type.xml",
-            ["ACTION_LIST003"],
+            ["ACTION_REQUIRED001"],
         )
 
-    def test_no_012_empty_type_reports_action_list003(self):
+    def test_no_012_empty_type_reports_action_required001(self):
         self.assert_sample_reports_rules(
             "samples/bad/Action/aml-12-empty-type.xml",
-            ["ACTION_LIST003"],
+            ["ACTION_REQUIRED001"],
         )
 
     def test_no_013_invalid_type_reports_action_list003(self):

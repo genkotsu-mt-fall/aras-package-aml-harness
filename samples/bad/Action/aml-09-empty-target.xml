@@ -1,6 +1,11 @@
 <AML>
   <Item type="Action" id="00000000000000000000000000000009" action="add">
     <location>client</location>
+    <method keyed_name="Empty Target Method" type="Method">
+      <Item type="Method" action="get" select="id">
+        <name>Empty Target Method</name>
+      </Item>
+    </method>
     <target />
     <type>item</type>
     <name>Empty Target Action</name>

@@ -1,6 +1,11 @@
 <AML>
   <Item type="Action" id="00000000000000000000000000000004" action="add">
     <location>server</location>
+    <method keyed_name="Valid ItemType Method" type="Method">
+      <Item type="Method" action="get" select="id">
+        <name>Valid ItemType Method</name>
+      </Item>
+    </method>
     <target>none</target>
     <type>itemtype</type>
     <name>Valid ItemType Action</name>

@@ -1,5 +1,10 @@
 <AML>
   <Item type="Action" id="00000000000000000000000000000005" action="add">
+    <method keyed_name="Missing Location Method" type="Method">
+      <Item type="Method" action="get" select="id">
+        <name>Missing Location Method</name>
+      </Item>
+    </method>
     <target>none</target>
     <type>item</type>
     <name>Missing Location Action</name>
