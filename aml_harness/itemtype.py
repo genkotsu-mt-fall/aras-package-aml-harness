@@ -2,6 +2,12 @@ from pathlib import Path
 import xml.etree.ElementTree as ET
 
 from aml_harness.base import Diagnostic
+from aml_harness.package_common import (
+    BEHAVIOR_VALUES,
+    check_optional_list,
+    diagnostic,
+    has_non_empty_child,
+)
 
 
 STANDARD_PROPERTY_EDIT_NAMES = {
@@ -70,6 +76,64 @@ def check_itemtype_property_placement(path: Path, root: ET.Element) -> list[Diag
                         message="Sequence property must not be required",
                     )
                 )
+
+    return diagnostics
+
+
+def check_itemtype_package(path: Path, root: ET.Element) -> list[Diagnostic]:
+    diagnostics: list[Diagnostic] = []
+
+    for itemtype in root.findall("Item"):
+        if itemtype.attrib.get("type") != "ItemType":
+            continue
+        for relationship in itemtype.findall("Relationships/Item"):
+            diagnostics.extend(check_itemtype_relationship(path, relationship))
+
+    return diagnostics
+
+
+def check_itemtype_relationship(path: Path, item: ET.Element) -> list[Diagnostic]:
+    diagnostics: list[Diagnostic] = []
+    item_type = item.attrib.get("type")
+
+    if item_type == "Server Event":
+        if item.attrib.get("action") == "add":
+            for name in ("event_version", "source_id"):
+                if not has_non_empty_child(item, name):
+                    diagnostics.append(
+                        diagnostic(
+                            path,
+                            "ITEMTYPE_SERVER_EVENT_REQUIRED001",
+                            f"Server Event.{name} is required",
+                        )
+                    )
+        check_optional_list(
+            path,
+            diagnostics,
+            item,
+            "behavior",
+            BEHAVIOR_VALUES,
+            "ITEMTYPE_SERVER_EVENT_LIST001",
+            "Server Event.behavior has an invalid value",
+        )
+    elif item_type == "Item Action":
+        if item.attrib.get("action") == "add" and not has_non_empty_child(item, "source_id"):
+            diagnostics.append(
+                diagnostic(
+                    path,
+                    "ITEMTYPE_ITEM_ACTION_REQUIRED001",
+                    "Item Action.source_id is required",
+                )
+            )
+        check_optional_list(
+            path,
+            diagnostics,
+            item,
+            "behavior",
+            BEHAVIOR_VALUES,
+            "ITEMTYPE_ITEM_ACTION_LIST001",
+            "Item Action.behavior has an invalid value",
+        )
 
     return diagnostics
 

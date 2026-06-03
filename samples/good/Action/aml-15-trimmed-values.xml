@@ -1,6 +1,11 @@
 <AML>
   <Item type="Action" id="00000000000000000000000000000015" action="add">
     <location> client </location>
+    <method keyed_name="Trimmed Values Method" type="Method">
+      <Item type="Method" action="get" select="id">
+        <name>Trimmed Values Method</name>
+      </Item>
+    </method>
     <target>
       none
     </target>

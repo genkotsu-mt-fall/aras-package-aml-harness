@@ -1,6 +1,11 @@
 <AML>
   <Item type="Action" id="00000000000000000000000000000013" action="add">
     <location>client</location>
+    <method keyed_name="Invalid Type Method" type="Method">
+      <Item type="Method" action="get" select="id">
+        <name>Invalid Type Method</name>
+      </Item>
+    </method>
     <target>none</target>
     <type>command</type>
     <name>Invalid Type Action</name>

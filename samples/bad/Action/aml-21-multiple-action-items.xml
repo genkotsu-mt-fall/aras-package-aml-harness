@@ -1,12 +1,22 @@
 <AML>
   <Item type="Action" id="00000000000000000000000000000021" action="add">
     <location>client</location>
+    <method keyed_name="Valid First Method" type="Method">
+      <Item type="Method" action="get" select="id">
+        <name>Valid First Method</name>
+      </Item>
+    </method>
     <target>none</target>
     <type>item</type>
     <name>Valid First Action</name>
   </Item>
   <Item type="Action" id="00000000000000000000000000000022" action="add">
     <location>server</location>
+    <method keyed_name="Invalid Second Method" type="Method">
+      <Item type="Method" action="get" select="id">
+        <name>Invalid Second Method</name>
+      </Item>
+    </method>
     <target>popup</target>
     <type>generic</type>
     <name>Invalid Second Action</name>

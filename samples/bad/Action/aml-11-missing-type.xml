@@ -1,6 +1,11 @@
 <AML>
   <Item type="Action" id="00000000000000000000000000000011" action="add">
     <location>client</location>
+    <method keyed_name="Missing Type Method" type="Method">
+      <Item type="Method" action="get" select="id">
+        <name>Missing Type Method</name>
+      </Item>
+    </method>
     <target>none</target>
     <name>Missing Type Action</name>
   </Item>

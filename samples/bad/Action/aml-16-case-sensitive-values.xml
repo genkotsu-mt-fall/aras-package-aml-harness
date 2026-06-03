@@ -1,6 +1,11 @@
 <AML>
   <Item type="Action" id="00000000000000000000000000000016" action="add">
     <location>Client</location>
+    <method keyed_name="Case Sensitive Method" type="Method">
+      <Item type="Method" action="get" select="id">
+        <name>Case Sensitive Method</name>
+      </Item>
+    </method>
     <target>None</target>
     <type>Item</type>
     <name>Case Sensitive Action</name>

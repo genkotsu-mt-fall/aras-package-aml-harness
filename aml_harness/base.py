@@ -13,7 +13,7 @@ class Diagnostic:
     severity: str = "error"
 
 
-ALLOWED_ACTIONS = {"add", "edit", "delete"}
+ALLOWED_ACTIONS = {"add", "edit", "delete", "get"}
 
 
 def check_file(path: Path) -> list[Diagnostic]:
@@ -81,6 +81,10 @@ def check_file(path: Path) -> list[Diagnostic]:
         from aml_harness.itemtype import check_itemtype_property_placement
 
         diagnostics.extend(check_itemtype_property_placement(path, root))
+
+        from aml_harness.package_checks import check_package_items
+
+        diagnostics.extend(check_package_items(path, root))
 
     return diagnostics
 
@@ -154,7 +158,7 @@ def check_item(path: Path, item: ET.Element) -> list[Diagnostic]:
             Diagnostic(
                 file_path=str(path),
                 rule_id="AML005",
-                message="<Item> action must be add, edit, or delete",
+                message="<Item> action must be add, edit, delete, or get",
             )
         )
 
