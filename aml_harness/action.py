@@ -2,6 +2,7 @@ from pathlib import Path
 import xml.etree.ElementTree as ET
 
 from aml_harness.base import Diagnostic
+from aml_harness.package_common import invalid_list_message, missing_child_message
 
 
 ACTION_LIST_PROPERTIES = (
@@ -45,7 +46,7 @@ def check_action_list_values(path: Path, root: ET.Element) -> list[Diagnostic]:
                         Diagnostic(
                             file_path=str(path),
                             rule_id="ACTION_REQUIRED001",
-                            message=f"Action.{element_name} is required",
+                            message=missing_child_message(f"Action.{element_name}", element_name),
                         )
                     )
 
@@ -54,7 +55,11 @@ def check_action_list_values(path: Path, root: ET.Element) -> list[Diagnostic]:
                     Diagnostic(
                         file_path=str(path),
                         rule_id="ACTION_REQUIRED001",
-                        message='Action.method must contain Method action="get" select="id" with name',
+                        message=(
+                            "Action.method is missing a valid inline Method reference. "
+                            'Add <method><Item type="Method" action="get" select="id">'
+                            "<name>...</name></Item></method>."
+                        ),
                     )
                 )
 
@@ -65,7 +70,7 @@ def check_action_list_values(path: Path, root: ET.Element) -> list[Diagnostic]:
                     Diagnostic(
                         file_path=str(path),
                         rule_id=rule_id,
-                        message=message,
+                        message=invalid_list_message(f"Action.{element_name}", value, allowed_values),
                     )
                 )
 

@@ -16,7 +16,7 @@ def check_imports_manifest(path: Path, root: ET.Element) -> list[Diagnostic]:
             Diagnostic(
                 file_path=str(path),
                 rule_id="IMPORTS001",
-                message="Root element must be <imports>",
+                message=f"Root element is <{root.tag}>. Replace it with <imports>.",
             )
         ]
 
@@ -28,7 +28,7 @@ def check_imports_manifest(path: Path, root: ET.Element) -> list[Diagnostic]:
             Diagnostic(
                 file_path=str(path),
                 rule_id="IMPORTS002",
-                message="<imports> must contain at least one <package>",
+                message='<imports> is missing a <package> child. Add <package name="..." path="...">.',
             )
         )
 
@@ -39,7 +39,10 @@ def check_imports_manifest(path: Path, root: ET.Element) -> list[Diagnostic]:
                 Diagnostic(
                     file_path=str(path),
                     rule_id="IMPORTS003",
-                    message=f"<imports> child must be <package>, but found <{child.tag}>",
+                    message=(
+                        f"<imports> child is <{child.tag}>. Expected <package>. "
+                        "Replace it or nest under <package>."
+                    ),
                 )
             )
 
@@ -56,7 +59,7 @@ def check_imports_manifest(path: Path, root: ET.Element) -> list[Diagnostic]:
                 Diagnostic(
                     file_path=str(path),
                     rule_id="IMPORTS004",
-                    message="<package> must have name attribute",
+                    message='<package> name attribute is missing. Add name="...".',
                 )
             )
 
@@ -67,7 +70,7 @@ def check_imports_manifest(path: Path, root: ET.Element) -> list[Diagnostic]:
                 Diagnostic(
                     file_path=str(path),
                     rule_id="IMPORTS005",
-                    message="<package> must have path attribute",
+                    message='<package> path attribute is missing. Add path="...".',
                 )
             )
         elif pkg_path not in _DOT_PATH_VALUES:
@@ -78,7 +81,10 @@ def check_imports_manifest(path: Path, root: ET.Element) -> list[Diagnostic]:
                     Diagnostic(
                         file_path=str(path),
                         rule_id="IMPORTS006",
-                        message=f"<package> path does not exist: {pkg_path}",
+                        message=(
+                            f'<package path="{pkg_path}"> target does not exist. '
+                            "Create the directory, fix path, or set path to an existing package folder."
+                        ),
                     )
                 )
 
@@ -90,7 +96,7 @@ def check_imports_manifest(path: Path, root: ET.Element) -> list[Diagnostic]:
                         Diagnostic(
                             file_path=str(path),
                             rule_id="IMPORTS007",
-                            message="<dependson> must have name attribute",
+                            message='<dependson> name attribute is missing. Add name="...".',
                         )
                     )
 

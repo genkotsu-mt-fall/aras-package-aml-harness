@@ -1,0 +1,5 @@
+<AML>
+  <Item type="Method" action="delete">
+    <name>SampleMethod</name>
+  </Item>
+</AML>

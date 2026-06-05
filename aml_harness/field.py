@@ -7,6 +7,7 @@ from aml_harness.package_common import (
     check_optional_list,
     diagnostic,
     has_non_empty_child,
+    missing_child_message,
 )
 
 
@@ -78,7 +79,7 @@ def check_body(path: Path, body: ET.Element, required_rule: str, list_rule: str)
     diagnostics: list[Diagnostic] = []
 
     if body.attrib.get("action") == "add" and not has_non_empty_child(body, "source_id"):
-        diagnostics.append(diagnostic(path, required_rule, "Body.source_id is required"))
+        diagnostics.append(diagnostic(path, required_rule, missing_child_message("Body.source_id", "source_id")))
 
     for name, values in BODY_LIST_PROPERTIES:
         check_optional_list(path, diagnostics, body, name, values, list_rule, f"Body.{name} has an invalid value")
@@ -92,7 +93,7 @@ def check_field(path: Path, field: ET.Element, required_rule: str, list_rule: st
     if field.attrib.get("action") == "add":
         for name in ("show_help", "source_id"):
             if not has_non_empty_child(field, name):
-                diagnostics.append(diagnostic(path, required_rule, f"Field.{name} is required"))
+                diagnostics.append(diagnostic(path, required_rule, missing_child_message(f"Field.{name}", name)))
 
     for name, values in FIELD_LIST_PROPERTIES:
         check_optional_list(path, diagnostics, field, name, values, list_rule, f"Field.{name} has an invalid value")
@@ -111,7 +112,9 @@ def check_field_event(
     if event.attrib.get("type") != "Field Event":
         return diagnostics
     if event.attrib.get("action") == "add" and not has_non_empty_child(event, "source_id"):
-        diagnostics.append(diagnostic(path, required_rule, "Field Event.source_id is required"))
+        diagnostics.append(
+            diagnostic(path, required_rule, missing_child_message("Field Event.source_id", "source_id"))
+        )
 
     check_optional_list(
         path,
@@ -144,7 +147,9 @@ def check_form_event(
     diagnostics: list[Diagnostic] = []
 
     if event.attrib.get("action") == "add" and not has_non_empty_child(event, "source_id"):
-        diagnostics.append(diagnostic(path, required_rule, "Form Event.source_id is required"))
+        diagnostics.append(
+            diagnostic(path, required_rule, missing_child_message("Form Event.source_id", "source_id"))
+        )
 
     check_optional_list(
         path,

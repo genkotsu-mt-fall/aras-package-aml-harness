@@ -1,0 +1,3 @@
+<imports>
+  <package name="MissingPackage" path="missing-package" />
+</imports>

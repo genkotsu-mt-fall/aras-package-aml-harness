@@ -1,0 +1,5 @@
+<imports>
+  <package name="SamplePackage" path=".">
+    <dependson />
+  </package>
+</imports>

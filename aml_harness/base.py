@@ -22,7 +22,7 @@ def check_file(path: Path) -> list[Diagnostic]:
             Diagnostic(
                 file_path=str(path),
                 rule_id="FILE001",
-                message="File does not exist",
+                message=f"File does not exist: {path}. Create the file or check the path.",
             )
         ]
 
@@ -31,7 +31,7 @@ def check_file(path: Path) -> list[Diagnostic]:
             Diagnostic(
                 file_path=str(path),
                 rule_id="FILE002",
-                message="Path is not a file",
+                message=f"Path is not a file: {path}. Specify an AML XML file path.",
             )
         ]
 
@@ -42,7 +42,7 @@ def check_file(path: Path) -> list[Diagnostic]:
             Diagnostic(
                 file_path=str(path),
                 rule_id="FILE003",
-                message=f"Failed to read file: {error}",
+                message=f"Failed to read file {path}: {error}. Check permissions or fix the path.",
             )
         ]
 
@@ -95,7 +95,7 @@ def check_base_aml(path: Path, root: ET.Element) -> list[Diagnostic]:
             Diagnostic(
                 file_path=str(path),
                 rule_id="AML001",
-                message="Root element must be <AML>",
+                message=f"Root element is <{root.tag}>. Replace it with <AML>.",
             )
         ]
 
@@ -106,7 +106,7 @@ def check_base_aml(path: Path, root: ET.Element) -> list[Diagnostic]:
             Diagnostic(
                 file_path=str(path),
                 rule_id="AML002",
-                message="<AML> must contain at least one <Item>",
+                message="<AML> has no <Item> children. Add at least one <Item type=\"...\" action=\"...\"> child.",
             )
         ]
 
@@ -118,7 +118,10 @@ def check_base_aml(path: Path, root: ET.Element) -> list[Diagnostic]:
                 Diagnostic(
                     file_path=str(path),
                     rule_id="AML003",
-                    message=f"<AML> child must be <Item>, but found <{child.tag}>",
+                    message=(
+                        f"<AML> child is <{child.tag}>. Expected <Item>. "
+                        "Replace it with <Item> or move into <Item>."
+                    ),
                 )
             )
             continue
@@ -141,7 +144,7 @@ def check_item(path: Path, item: ET.Element) -> list[Diagnostic]:
             Diagnostic(
                 file_path=str(path),
                 rule_id="AML004",
-                message="<Item> must have type attribute",
+                message='<Item> type attribute is missing. Add type="...".',
             )
         )
 
@@ -150,7 +153,10 @@ def check_item(path: Path, item: ET.Element) -> list[Diagnostic]:
             Diagnostic(
                 file_path=str(path),
                 rule_id="AML005",
-                message="<Item> must have action attribute",
+                message=(
+                    '<Item> is missing the action attribute. Add action="add", '
+                    'action="edit", action="delete", or action="get".'
+                ),
             )
         )
     elif action not in ALLOWED_ACTIONS:
@@ -158,7 +164,10 @@ def check_item(path: Path, item: ET.Element) -> list[Diagnostic]:
             Diagnostic(
                 file_path=str(path),
                 rule_id="AML005",
-                message="<Item> action must be add, edit, delete, or get",
+                message=(
+                    f'<Item action> has invalid value "{action}". '
+                    'Replace it with one of: add, edit, delete, get.'
+                ),
             )
         )
 
@@ -167,7 +176,7 @@ def check_item(path: Path, item: ET.Element) -> list[Diagnostic]:
             Diagnostic(
                 file_path=str(path),
                 rule_id="AML006",
-                message="<Item> action add or edit must have id attribute",
+                message=f'<Item action="{action}"> id attribute is missing. Add id="...".',
             )
         )
 
@@ -176,7 +185,7 @@ def check_item(path: Path, item: ET.Element) -> list[Diagnostic]:
             Diagnostic(
                 file_path=str(path),
                 rule_id="AML007",
-                message="<Item> action delete must have non-empty where attribute",
+                message='<Item action="delete"> where attribute is missing or empty. Add where="...".',
             )
         )
 

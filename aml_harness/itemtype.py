@@ -7,6 +7,7 @@ from aml_harness.package_common import (
     check_optional_list,
     diagnostic,
     has_non_empty_child,
+    missing_child_message,
 )
 
 
@@ -58,7 +59,7 @@ def check_itemtype_property_placement(path: Path, root: ET.Element) -> list[Diag
                         file_path=str(path),
                         rule_id="ITEMTYPE001",
                         message=(
-                            f"Standard property {property_name} must use "
+                            f"Standard property {property_name} uses action=\"add\". Change it to use "
                             'Property action="edit"'
                         ),
                     )
@@ -73,7 +74,10 @@ def check_itemtype_property_placement(path: Path, root: ET.Element) -> list[Diag
                     Diagnostic(
                         file_path=str(path),
                         rule_id="ITYPE_SEQUENCE001",
-                        message="Sequence property must not be required",
+                        message=(
+                            'Property with data_type="sequence" must not have '
+                            "<is_required>1</is_required>. Remove <is_required> or set it to 0."
+                        ),
                     )
                 )
 
@@ -104,7 +108,7 @@ def check_itemtype_relationship(path: Path, item: ET.Element) -> list[Diagnostic
                         diagnostic(
                             path,
                             "ITEMTYPE_SERVER_EVENT_REQUIRED001",
-                            f"Server Event.{name} is required",
+                            missing_child_message(f"Server Event.{name}", name),
                         )
                     )
         check_optional_list(
@@ -122,7 +126,7 @@ def check_itemtype_relationship(path: Path, item: ET.Element) -> list[Diagnostic
                 diagnostic(
                     path,
                     "ITEMTYPE_ITEM_ACTION_REQUIRED001",
-                    "Item Action.source_id is required",
+                    missing_child_message("Item Action.source_id", "source_id"),
                 )
             )
         check_optional_list(
