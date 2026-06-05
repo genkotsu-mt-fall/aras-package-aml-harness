@@ -1,0 +1,3 @@
+<AML>
+  <package name="Sample" path="." />
+</AML>

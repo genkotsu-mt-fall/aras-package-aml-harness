@@ -2,7 +2,7 @@ from pathlib import Path
 import xml.etree.ElementTree as ET
 
 from aml_harness.base import Diagnostic
-from aml_harness.package_common import diagnostic, has_non_empty_child
+from aml_harness.package_common import diagnostic, has_non_empty_child, missing_child_message
 
 
 def check_variable_package(path: Path, root: ET.Element) -> list[Diagnostic]:
@@ -12,6 +12,8 @@ def check_variable_package(path: Path, root: ET.Element) -> list[Diagnostic]:
         if item.attrib.get("type") != "Variable":
             continue
         if item.attrib.get("action") == "add" and not has_non_empty_child(item, "name"):
-            diagnostics.append(diagnostic(path, "VARIABLE_REQUIRED001", "Variable/Variable.name is required"))
+            diagnostics.append(
+                diagnostic(path, "VARIABLE_REQUIRED001", missing_child_message("Variable.name", "name"))
+            )
 
     return diagnostics

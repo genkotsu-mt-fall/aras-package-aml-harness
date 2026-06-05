@@ -1,0 +1,3 @@
+<imports>
+  <dependson name="Core" />
+</imports>

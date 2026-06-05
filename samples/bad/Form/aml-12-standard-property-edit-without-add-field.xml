@@ -1,0 +1,10 @@
+<AML>
+  <Item type="Field" id="CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC" action="edit">
+    <propertytype_id>
+      <Item type="Property" action="get" select="id">
+        <name>state</name>
+        <source_id type="ItemType">DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD</source_id>
+      </Item>
+    </propertytype_id>
+  </Item>
+</AML>

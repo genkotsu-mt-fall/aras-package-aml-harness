@@ -1,0 +1,9 @@
+<AML>
+  <Item type="Action" id="33333333333333333333333333333333" action="add">
+    <name>PE_ChooseCMOptions</name>
+    <location>client</location>
+    <method />
+    <target>main</target>
+    <type>item</type>
+  </Item>
+</AML>

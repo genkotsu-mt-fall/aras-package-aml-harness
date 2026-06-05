@@ -1,0 +1,11 @@
+<AML>
+  <Item type="ItemType" id="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" action="edit">
+    <Relationships>
+      <Item type="Property" id="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB" action="add">
+        <name>sample_sequence</name>
+        <data_type>sequence</data_type>
+        <is_required>1</is_required>
+      </Item>
+    </Relationships>
+  </Item>
+</AML>

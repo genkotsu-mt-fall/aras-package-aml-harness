@@ -1,0 +1,10 @@
+<AML>
+  <Item type="ItemType" id="BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB" action="edit">
+    <Relationships>
+      <Item type="Property" id="BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBC" action="add">
+        <name>state</name>
+        <data_type>string</data_type>
+      </Item>
+    </Relationships>
+  </Item>
+</AML>

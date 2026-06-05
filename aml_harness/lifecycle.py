@@ -2,7 +2,7 @@ from pathlib import Path
 import xml.etree.ElementTree as ET
 
 from aml_harness.base import Diagnostic
-from aml_harness.package_common import diagnostic, has_non_empty_child
+from aml_harness.package_common import diagnostic, has_non_empty_child, missing_child_message
 
 
 def check_lifecycle_package(path: Path, root: ET.Element) -> list[Diagnostic]:
@@ -16,7 +16,7 @@ def check_lifecycle_package(path: Path, root: ET.Element) -> list[Diagnostic]:
                 diagnostic(
                     path,
                     "LIFECYCLE_REQUIRED001",
-                    "Life Cycle Map/Life Cycle Map.name is required",
+                    missing_child_message("Life Cycle Map.name", "name"),
                 )
             )
 

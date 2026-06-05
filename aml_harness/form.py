@@ -8,7 +8,7 @@ from aml_harness.field import (
     check_field_event,
     check_form_event,
 )
-from aml_harness.package_common import diagnostic, has_non_empty_child
+from aml_harness.package_common import diagnostic, has_non_empty_child, missing_child_message
 
 
 STANDARD_PROPERTIES = {
@@ -92,8 +92,9 @@ def check_form_propertytype(path: Path, root: ET.Element) -> list[Diagnostic]:
                     file_path=str(path),
                     rule_id="FORM003",
                     message=(
-                        f"Standard property {property_name} requires matching "
-                        "Field action=\"add\""
+                        f"Standard property {property_name} requires a matching "
+                        "Field action=\"add\" with the same id. "
+                        "Add Field action=\"add\" for that id."
                     ),
                 )
             )
@@ -139,7 +140,13 @@ def check_form_package(path: Path, root: ET.Element) -> list[Diagnostic]:
         if form.attrib.get("action") == "add":
             for name in ("height", "width", "name"):
                 if not has_non_empty_child(form, name):
-                    diagnostics.append(diagnostic(path, "FORM_REQUIRED001", f"Form/Form.{name} is required"))
+                    diagnostics.append(
+                        diagnostic(
+                            path,
+                            "FORM_REQUIRED001",
+                            missing_child_message(f"Form.{name}", name),
+                        )
+                    )
 
         for relationship in form.findall("Relationships/Item"):
             diagnostics.extend(check_form_relationship(path, relationship))
