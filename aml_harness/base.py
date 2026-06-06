@@ -60,7 +60,7 @@ def check_file(path: Path) -> list[Diagnostic]:
             )
         ]
 
-    if path.name.lower() == "imports.mf":
+    if path.suffix.lower() == ".mf":
         from aml_harness.imports_manifest import check_imports_manifest
 
         return check_imports_manifest(path, root)
