@@ -146,3 +146,7 @@ onmouseover, onmousedown, onmouseup, onmousemove
 このプロジェクトの変更履歴やタスク履歴は、以下の GitHub Pages で確認できます。
 
 https://genkotsu-mt-fall.github.io/aras-package-aml-harness/task-site/
+
+## 免責事項
+
+本プロジェクトは Aras Corporation の公式製品ではなく、Aras Corporation、その関連会社、Aras Labs によって承認・後援・推奨されているものではありません。詳細は [DISCLAIMER.md](./DISCLAIMER.md) を参照してください。
